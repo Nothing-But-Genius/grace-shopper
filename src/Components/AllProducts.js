@@ -1,19 +1,26 @@
-import React, { useState, useEffect, useParams } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getProducts } from '../store/product';
 
 // import { useSelector, useDispatch } from 'react-redux';
 
-const AllProducts = ({ loadProducts }) => {
-  const { id } = useParams();
+const AllProducts = ({ loadProducts, products }) => {
   useEffect(() => {
     try {
       loadProducts();
     } catch (error) {
       console.log(error);
     }
-  }, [id, loadProducts]);
-  return <div id="allProducts"></div>;
+  }, [products]);
+  return (
+    <div id="allProducts">
+      <ul>
+        {products.map((product) => {
+          return <li>{product.name}</li>;
+        })}
+      </ul>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {
