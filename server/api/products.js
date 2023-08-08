@@ -5,10 +5,10 @@ const app = express.Router()
 const { Product } = require('../db');
 
 // get /api/products
-app.get('/products', async(req, res, next)=> {
+app.get('/', async(req, res, next)=> {
   try {
     const products = await Product.findAll()
-    res.json(products);
+    res.send(products);
   }
   catch(ex){
     next(ex);
