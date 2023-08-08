@@ -2,7 +2,6 @@ const express = require('express');
 const app = express.Router();
 const { Product } = require('../db');
 
-module.exports = app;
 
 app.get('/', async (req, res, next) => {
   try {
@@ -12,3 +11,29 @@ app.get('/', async (req, res, next) => {
     next(ex);
   }
 });
+
+
+
+
+// POST Route - products
+app.post ('/', async (req,res,next) => {
+  try {
+
+    const [ newProduct, created ] = await Product.findOrCreate({
+      where : {
+        name: req.body.name
+      },
+      defaults :req.body
+    })
+    if (!created) {
+      return res.status(409).end()
+  }
+    res.status(201).send(newProduct)
+  } catch (error) {
+    next(error)
+    
+  }
+})
+
+module.exports = app;
+
