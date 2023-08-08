@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../store/product';
 import { fetchCart } from '../store/cart';
-import axois from 'axios';
+import axios from 'axios';
 
 const AllProducts = () => {
   const { products, cart } = useSelector((state) => state);
@@ -16,34 +16,29 @@ const AllProducts = () => {
       console.log(error);
     }
   }, []);
-  products.forEach((product) => {
-    quantity[product.name] = 0;
-  });
-  cart.lineItems.forEach((lineItem) => {
-    quantity[lineItem.product.name] = lineItem.quantity;
-  });
-  // const onChange = (ev) => {
-  //   setQuantity({ ...quantity, [ev.target.name]: ev.target.value });
-  //   console.log(quantity);
-  // };
+  useEffect(() => {
+    products.forEach((product) => {
+      quantity[product.name] = 0;
+    });
+    cart.lineItems.forEach((lineItem) => {
+      quantity[lineItem.product.name] = lineItem.quantity;
+    });
+  }, [products, cart]);
+
   const decrement = (ev) => {
-    let productCount = quantity[ev.target.name];
-    let productName = ev.target.name;
-    // setQuantity({ ...quantity, [productName]: productCount - 1 });
-    quantity[productName] = productCount - 1;
-    setQuantity({ ...quantity });
-    console.log(quantity);
+    setQuantity({
+      ...quantity,
+      [ev.target.name]: quantity[ev.target.name] - 1,
+    });
   };
   const increment = (ev) => {
-    let productCount = quantity[ev.target.name];
-    let productName = ev.target.name;
-    // setQuantity({ ...quantity, [productName]: productCount + 1 });
-    quantity[productName] = productCount + 1;
-    setQuantity({ ...quantity });
-    console.log(quantity);
+    setQuantity({
+      ...quantity,
+      [ev.target.name]: quantity[ev.target.name] + 1,
+    });
   };
   const addToCart = async (product) => {
-    await axios.post('/api/orders/cart', product, quantity[product.name]);
+    dispatch();
   };
   return (
     <div id="allProducts">
@@ -54,28 +49,21 @@ const AllProducts = () => {
             <div key={product.id}>
               <li>{product.name}</li>
               Quantity: {quantity[product.name]}
-              {/* <input
-                type="number"
-                min="0"
-                value={quantity[product.name]}
-                name={product.name}
-                onChange={onChange}
-              ></input> */}
               <button
                 name={product.name}
-                onClick={decrement}
+                onClick={(ev) => decrement(ev)}
               >
                 -
               </button>
               <button
                 name={product.name}
-                onClick={increment}
+                onClick={(ev) => increment(ev)}
               >
                 +
               </button>
               <button
                 type="button"
-                onClick={addToCart}
+                onClick={(product) => addToCart(product)}
               >
                 Add to Cart
               </button>
