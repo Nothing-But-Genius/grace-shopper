@@ -1,19 +1,17 @@
-const express = require ('express')
-const app = express.Router()
-
-// Import tables
+const express = require('express');
+const app = express.Router();
 const { Product } = require('../db');
 
-// get /api/products
-app.get('/', async(req, res, next)=> {
+
+app.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll()
+    const products = await Product.findAll();
     res.send(products);
-  }
-  catch(ex){
+  } catch (ex) {
     next(ex);
   }
 });
+
 
 
 
@@ -38,3 +36,4 @@ app.post ('/', async (req,res,next) => {
 })
 
 module.exports = app;
+
