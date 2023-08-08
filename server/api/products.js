@@ -13,6 +13,19 @@ app.get('/', async (req, res, next) => {
 });
 
 
+// get Single product /api/products/:id
+app.get('/:id', async(req, res, next)=> {
+  try {
+    const data = req.params.id
+    const product = await Product.findByPk(data)
+    res.json(product);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+
 
 
 // POST Route - products
