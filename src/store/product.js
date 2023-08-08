@@ -12,7 +12,7 @@ export const _getProducts = (products) => {
 export const getProducts = () => {
   return (dispatch) => {
     axios
-      .get('/products')
+      .get('/api/products')
       .then((response) => {
         dispatch(_getProducts(response.data));
       })
