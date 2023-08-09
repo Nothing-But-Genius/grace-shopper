@@ -22,7 +22,14 @@ const App = () => {
   return (
     <div>
       <h1>Acme Shopping</h1>
-      {auth.id ? <div /> : <Login />}
+      {auth.id ? (
+        <div>
+          Welcome {auth.username}!!
+          <button onClick={() => dispatch(logout())}>Logout</button>
+        </div>
+      ) : (
+        <Login />
+      )}
       {!!auth.id && (
         <div>
           <nav>

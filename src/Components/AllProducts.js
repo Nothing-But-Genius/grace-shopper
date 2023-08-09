@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProducts } from '../store/product';
-import { fetchCart } from '../store/cart';
+import { getProducts, getSingleProduct } from '../store/product';
+import { editCart, fetchCart } from '../store/cart';
 import axios from 'axios';
 
 const AllProducts = () => {
-  const { products, cart } = useSelector((state) => state);
+  const { products, cart, auth } = useSelector((state) => state);
   const [quantity, setQuantity] = useState({});
   const dispatch = useDispatch();
+
   useEffect(() => {
     try {
       dispatch(getProducts());
@@ -16,8 +17,9 @@ const AllProducts = () => {
       console.log(error);
     }
   }, []);
+
   useEffect(() => {
-    products.forEach((product) => {
+    products.products.forEach((product) => {
       quantity[product.name] = 0;
     });
     cart.lineItems.forEach((lineItem) => {
@@ -31,20 +33,38 @@ const AllProducts = () => {
       [ev.target.name]: quantity[ev.target.name] - 1,
     });
   };
+
   const increment = (ev) => {
     setQuantity({
       ...quantity,
       [ev.target.name]: quantity[ev.target.name] + 1,
     });
   };
-  const addToCart = async (product) => {
-    dispatch();
+
+  const addProdToCart = (productId) => {
+    let newProduct = dispatch(getSingleProduct(productId)).then(async () => {
+      const token = window.localStorage.getItem('token');
+      const response = await axios.get('/api/auth', {
+        headers: {
+          authorization: token,
+        },
+      });
+      let amount = quantity[newProduct.name];
+      let user = response.data;
+      console.log(user);
+      user.addToCart({ product: newProduct, quantity: amount });
+    });
+    // let amount = quantity[newProduct.name];
+    // console.log(newProduct);
+    // console.log(amount);
+    // auth.addToCart({ newProduct, amount });
   };
+
   return (
     <div id="allProducts">
       <h1>All Products</h1>
       <ul>
-        {products.map((product) => {
+        {products.products.map((product) => {
           return (
             <div key={product.id}>
               <li>{product.name}</li>
@@ -63,7 +83,8 @@ const AllProducts = () => {
               </button>
               <button
                 type="button"
-                onClick={(product) => addToCart(product)}
+                value={product.id}
+                onClick={(ev) => addProdToCart(ev.target.value)}
               >
                 Add to Cart
               </button>
