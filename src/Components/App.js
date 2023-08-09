@@ -22,14 +22,19 @@ const App = () => {
   return (
     <div>
       <h1>Acme Shopping</h1>
-      {auth.id ? <Home /> : <Login />}
+      {auth.id ? <div /> : <Login />}
       {!!auth.id && (
         <div>
           <nav>
             <Link to="/">Home</Link>
+            <Link to="/products">Products</Link>
             <Link to="/cart">Cart</Link>
           </nav>
           <Routes>
+            <Route
+              path="/"
+              element={<Home />}
+            />
             <Route
               path="/cart"
               element={<Cart />}
