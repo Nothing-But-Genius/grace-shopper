@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { User } = require("../db");
 
-router.get("/users", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll();
     res.json(users);
@@ -12,7 +12,7 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
-router.get("/user/:id", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     res.send(await User.findByPk(req.params.id));
   } catch (ex) {
@@ -20,7 +20,7 @@ router.get("/user/:id", async (req, res, next) => {
   }
 });
 
-router.post("/user", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     res.status(201).send(await User.create(req.body));
   } catch (ex) {
@@ -28,7 +28,7 @@ router.post("/user", async (req, res, next) => {
   }
 });
 
-router.put("/user/:id", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id);
     res.send(await user.update(req.body));
@@ -37,7 +37,7 @@ router.put("/user/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/user/:id", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id);
     await user.destroy();
