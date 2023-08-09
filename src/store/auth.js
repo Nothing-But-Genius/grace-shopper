@@ -25,17 +25,6 @@ export const loginWithToken = () => {
   };
 };
 
-export const signup = (user) => {
-  axios
-    .post("/api/auth/signup", user)
-    .then(({ data }) => {
-      dispatch({ type: "SET_AUTH", auth: data.username });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
 export const attemptLogin = (credentials) => {
   return async (dispatch) => {
     const response = await axios.post("/api/auth", credentials);

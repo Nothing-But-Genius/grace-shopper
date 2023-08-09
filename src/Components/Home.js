@@ -1,6 +1,8 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store";
+import { Link } from "react-router-dom";
+import CreateUser from "./CreateUser";
 
 const Home = () => {
   const { auth } = useSelector((state) => state);
@@ -8,8 +10,10 @@ const Home = () => {
   return (
     <div>
       <h1>Home</h1>
-      Welcome {auth.username}!!
-      <button onClick={() => dispatch(logout())}>Logout</button>
+      <div>
+        Welcome {auth.username}!!
+        <button onClick={() => dispatch(logout())}>Logout</button>
+      </div>
     </div>
   );
 };
