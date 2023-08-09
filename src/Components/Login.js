@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import CreateUser from "./CreateUser";
 import RegisterButton from "./RegisterButton";
 import AllUsers from "./AllUsers";
+import NavBar from "./NavBar";
 
 const Login = () => {
   const dispatch = useDispatch();
