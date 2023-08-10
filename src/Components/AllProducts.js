@@ -12,6 +12,7 @@ const AllProducts = () => {
     try {
       dispatch(getProducts());
       dispatch(fetchCart());
+      console.log(cart);
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +83,7 @@ const AllProducts = () => {
               <li>
                 <span id="large-text">{product.name}</span>
               </li>
-              Cart Quantity: {quantity[product.id]}
+              Quantity: {quantity[product.id]}
               <br />
               <button
                 name={product.id}
