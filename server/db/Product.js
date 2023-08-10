@@ -14,6 +14,13 @@ const Product = conn.define('product', {
       notEmpty: true
     }
   },
+  details: {
+    type: STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
+  },
 });
 
 module.exports = Product;

@@ -18,7 +18,7 @@ const NavBar = () => {
             component="div"
             sx={{ flexGrow: 1 }}
           >
-            Acme Shopping
+            Palestra Attire
           </Typography>
           <Stack
             direction="row"
