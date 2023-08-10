@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../store/product';
-import { editCart, fetchCart } from '../store/cart';
+import { editCart, removeFromCart, fetchCart } from '../store/cart';
 
 const AllProducts = () => {
-  const { products, cart, auth } = useSelector((state) => state);
+  const { products, cart } = useSelector((state) => state);
   const [quantity, setQuantity] = useState({});
   const dispatch = useDispatch();
 
@@ -52,18 +52,31 @@ const AllProducts = () => {
     }
     let currentQuantity = cartLineItem.quantity;
     let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
-    dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
+    if (newCartQuantity >= 0) {
+      dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
+    } else {
+      dispatch(
+        removeFromCart({
+          product: cartProduct,
+          quantityToRemove: -newCartQuantity,
+        })
+      );
+    }
   };
 
   return (
     <div id="allProducts">
       <h1>All Products</h1>
       <ul>
+        <hr />
         {products.map((product) => {
           return (
             <div key={product.id}>
-              <li>{product.name}</li>
-              Quantity: {quantity[product.id]}
+              <li>
+                <span id="large-text">{product.name}</span>
+              </li>
+              Cart Quantity: {quantity[product.id]}
+              <br />
               <button
                 name={product.id}
                 onClick={(ev) => decrement(ev)}
@@ -83,6 +96,7 @@ const AllProducts = () => {
               >
                 Update Cart
               </button>
+              <hr />
             </div>
           );
         })}
