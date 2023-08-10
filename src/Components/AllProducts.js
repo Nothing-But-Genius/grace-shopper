@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../store/product';
-import { fetchCart } from '../store/cart';
-import axios from 'axios';
+import { editCart, fetchCart } from '../store/cart';
 
 const AllProducts = () => {
-  const { products, cart } = useSelector((state) => state);
+  const { products, cart, auth } = useSelector((state) => state);
   const [quantity, setQuantity] = useState({});
   const dispatch = useDispatch();
+
   useEffect(() => {
     try {
       dispatch(getProducts());
@@ -16,12 +16,13 @@ const AllProducts = () => {
       console.log(error);
     }
   }, []);
+
   useEffect(() => {
     products.forEach((product) => {
-      quantity[product.name] = 0;
+      quantity[product.id] = 0;
     });
     cart.lineItems.forEach((lineItem) => {
-      quantity[lineItem.product.name] = lineItem.quantity;
+      quantity[lineItem.product.id] = lineItem.quantity;
     });
   }, [products, cart]);
 
@@ -31,15 +32,29 @@ const AllProducts = () => {
       [ev.target.name]: quantity[ev.target.name] - 1,
     });
   };
+
   const increment = (ev) => {
     setQuantity({
       ...quantity,
       [ev.target.name]: quantity[ev.target.name] + 1,
     });
   };
-  const addToCart = async (product) => {
-    dispatch();
+
+  const addProdToCart = (productId) => {
+    let [cartProduct] = products.filter((product) => product.id === productId);
+    let [cartLineItem] = cart.lineItems.filter(
+      (lineItem) => lineItem.productId === productId
+    );
+    if (!cartLineItem) {
+      cartLineItem = {
+        quantity: 0,
+      };
+    }
+    let currentQuantity = cartLineItem.quantity;
+    let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
+    dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
   };
+
   return (
     <div id="allProducts">
       <h1>All Products</h1>
@@ -48,24 +63,25 @@ const AllProducts = () => {
           return (
             <div key={product.id}>
               <li>{product.name}</li>
-              Quantity: {quantity[product.name]}
+              Quantity: {quantity[product.id]}
               <button
-                name={product.name}
+                name={product.id}
                 onClick={(ev) => decrement(ev)}
               >
                 -
               </button>
               <button
-                name={product.name}
+                name={product.id}
                 onClick={(ev) => increment(ev)}
               >
                 +
               </button>
               <button
                 type="button"
-                onClick={(product) => addToCart(product)}
+                value={product.id}
+                onClick={(ev) => addProdToCart(ev.target.value)}
               >
-                Add to Cart
+                Update Cart
               </button>
             </div>
           );

@@ -1,8 +1,8 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../store";
-import { Link } from "react-router-dom";
-import CreateUser from "./CreateUser";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store';
+import { Link } from 'react-router-dom';
+import CreateUser from './CreateUser';
 
 const Home = () => {
   const { auth } = useSelector((state) => state);

@@ -1,23 +1,47 @@
 import axios from 'axios';
-const cart = (state = { lineItems: [] }, action)=> {
-  if(action.type === 'SET_CART'){
-    return action.cart;
+
+const SET_CART = 'SET_CART';
+const EDIT_CART = 'EDIT_CART';
+
+const cart = (state = { lineItems: [] }, action) => {
+  switch (action.type) {
+    case SET_CART:
+      return action.cart;
+    case EDIT_CART:
+      return action.cart;
+    default:
+      return state;
   }
-  return state;
 };
 
-
-export const fetchCart = ()=> {
-  return async(dispatch)=> {
+export const editCart = ({ product, quantity }) => {
+  return async (dispatch) => {
     const token = window.localStorage.getItem('token');
-    const response = await axios.get('/api/orders/cart', {
-      headers: {
-        authorization: token
+    const response = await axios.post(
+      '/api/orders/cart',
+      { product, quantity },
+      {
+        headers: {
+          authorization: token,
+          product,
+          quantity,
+        },
       }
-    });
-    dispatch({ type: 'SET_CART', cart: response.data });
+    );
+    dispatch({ type: EDIT_CART, cart: response.data });
   };
 };
 
+export const fetchCart = () => {
+  return async (dispatch) => {
+    const token = window.localStorage.getItem('token');
+    const response = await axios.get('/api/orders/cart', {
+      headers: {
+        authorization: token,
+      },
+    });
+    dispatch({ type: SET_CART, cart: response.data });
+  };
+};
 
 export default cart;
