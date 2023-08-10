@@ -23,14 +23,9 @@ const App = () => {
   return (
     <div>
       <NavBar />
-      {auth.id ? <Home /> : <Login />}
-      {!!auth.id && (
+      {/* {auth.id ? <Home /> : <Login />} */}
+      {
         <div>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/products">Products</Link>
-            <Link to="/cart">Cart</Link>
-          </nav>
           <Routes>
             <Route
               path="/cart"
@@ -40,9 +35,17 @@ const App = () => {
               path="/products"
               element={<AllProducts />}
             />
+            <Route
+              path="/"
+              element={<Home />}
+            />
+            <Route
+              path="/login"
+              element={<Login />}
+            />
           </Routes>
         </div>
-      )}
+      }
     </div>
   );
 };

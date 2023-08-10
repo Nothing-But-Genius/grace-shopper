@@ -19,11 +19,11 @@ const AllProducts = () => {
   }, []);
 
   useEffect(() => {
-    products.products.forEach((product) => {
-      quantity[product.name] = 0;
+    products.forEach((product) => {
+      quantity[product.id] = 0;
     });
     cart.lineItems.forEach((lineItem) => {
-      quantity[lineItem.product.name] = lineItem.quantity;
+      quantity[lineItem.product.id] = lineItem.quantity;
     });
   }, [products, cart]);
 
@@ -42,41 +42,37 @@ const AllProducts = () => {
   };
 
   const addProdToCart = (productId) => {
-    let newProduct = dispatch(getSingleProduct(productId)).then(async () => {
-      const token = window.localStorage.getItem('token');
-      const response = await axios.get('/api/auth', {
-        headers: {
-          authorization: token,
-        },
-      });
-      let amount = quantity[newProduct.name];
-      let user = response.data;
-      console.log(user);
-      user.addToCart({ product: newProduct, quantity: amount });
-    });
-    // let amount = quantity[newProduct.name];
-    // console.log(newProduct);
-    // console.log(amount);
-    // auth.addToCart({ newProduct, amount });
+    let [cartProduct] = products.filter((product) => product.id === productId);
+    let [cartLineItem] = cart.lineItems.filter(
+      (lineItem) => lineItem.productId === productId
+    );
+    if (!cartLineItem) {
+      cartLineItem = {
+        quantity: 0,
+      };
+    }
+    let currentQuantity = cartLineItem.quantity;
+    let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
+    dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
   };
 
   return (
     <div id="allProducts">
       <h1>All Products</h1>
       <ul>
-        {products.products.map((product) => {
+        {products.map((product) => {
           return (
             <div key={product.id}>
               <li>{product.name}</li>
-              Quantity: {quantity[product.name]}
+              Quantity: {quantity[product.id]}
               <button
-                name={product.name}
+                name={product.id}
                 onClick={(ev) => decrement(ev)}
               >
                 -
               </button>
               <button
-                name={product.name}
+                name={product.id}
                 onClick={(ev) => increment(ev)}
               >
                 +
@@ -86,7 +82,7 @@ const AllProducts = () => {
                 value={product.id}
                 onClick={(ev) => addProdToCart(ev.target.value)}
               >
-                Add to Cart
+                Update Cart
               </button>
             </div>
           );
