@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { ShoppingCart } from "phosphor-react"
 
 const NavBar = () => {
   return (
@@ -52,8 +53,9 @@ const NavBar = () => {
                 to="/cart"
                 style={{ color: 'white' }}
               >
-                Cart
+                <ShoppingCart size ="28"/>
               </NavLink>
+              
             </Button>
           </Stack>
         </Toolbar>
