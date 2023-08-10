@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProducts, getSingleProduct } from '../store/product';
+import { getProducts } from '../store/product';
 import { editCart, fetchCart } from '../store/cart';
-import axios from 'axios';
 
 const AllProducts = () => {
   const { products, cart, auth } = useSelector((state) => state);

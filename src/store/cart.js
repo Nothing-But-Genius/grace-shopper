@@ -15,8 +15,6 @@ const cart = (state = { lineItems: [] }, action) => {
 };
 
 export const editCart = ({ product, quantity }) => {
-  console.log(product);
-  console.log(quantity);
   return async (dispatch) => {
     const token = window.localStorage.getItem('token');
     const response = await axios.post(
