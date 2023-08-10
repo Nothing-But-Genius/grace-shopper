@@ -6,12 +6,6 @@ const Cart = () => {
   const { cart } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   cart.lineItems.forEach((lineItem) => {
-  //     quantity[lineItem.product.id] = lineItem.quantity;
-  //   });
-  // }, [cart]);
-
   const decrement = (ev) => {
     let [editLineItem] = cart.lineItems.filter(
       (lineItem) => lineItem.productId === ev.target.name

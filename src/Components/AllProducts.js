@@ -27,10 +27,17 @@ const AllProducts = () => {
   }, [products, cart]);
 
   const decrement = (ev) => {
-    setQuantity({
-      ...quantity,
-      [ev.target.name]: quantity[ev.target.name] - 1,
-    });
+    if (quantity[ev.target.name] <= 1) {
+      setQuantity({
+        ...quantity,
+        [ev.target.name]: 0,
+      });
+    } else {
+      setQuantity({
+        ...quantity,
+        [ev.target.name]: quantity[ev.target.name] - 1,
+      });
+    }
   };
 
   const increment = (ev) => {
@@ -52,7 +59,7 @@ const AllProducts = () => {
     }
     let currentQuantity = cartLineItem.quantity;
     let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
-    if (newCartQuantity >= 0) {
+    if (newCartQuantity > 0) {
       dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
     } else {
       dispatch(
