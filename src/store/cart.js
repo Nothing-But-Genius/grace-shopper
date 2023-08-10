@@ -2,12 +2,15 @@ import axios from 'axios';
 
 const SET_CART = 'SET_CART';
 const EDIT_CART = 'EDIT_CART';
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 
 const cart = (state = { lineItems: [] }, action) => {
   switch (action.type) {
     case SET_CART:
       return action.cart;
     case EDIT_CART:
+      return action.cart;
+    case REMOVE_FROM_CART:
       return action.cart;
     default:
       return state;
@@ -23,8 +26,22 @@ export const editCart = ({ product, quantity }) => {
       {
         headers: {
           authorization: token,
-          product,
-          quantity,
+        },
+      }
+    );
+    dispatch({ type: EDIT_CART, cart: response.data });
+  };
+};
+
+export const removeFromCart = ({ product, quantityToRemove }) => {
+  return async (dispatch) => {
+    const token = window.localStorage.getItem('token');
+    const response = await axios.put(
+      '/api/orders/cart',
+      { product, quantityToRemove },
+      {
+        headers: {
+          authorization: token,
         },
       }
     );
