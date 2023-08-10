@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import { useDispatch } from "react-redux"
+import { addProduct } from "../store/product"
 
 
 function AddProduct(){
@@ -10,12 +11,13 @@ function AddProduct(){
         details:'',
     })
 
-
+//Dispatch thunk when submit is clicked
     const handleFormSubmit = (event) => {
         event.preventDefault()
-        // dispatch(createProduct action (formData))
+        dispatch(addProduct(formData))
     }
-// functional component to handle formchange
+
+// functional component to handle form change
     const handleFormChange = (event) => {
         const{ name, value } = event.target
         setFormData((prevFormData)=>({
