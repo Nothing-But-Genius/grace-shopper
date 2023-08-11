@@ -4,6 +4,8 @@ const { User } = require('../db');
 
 module.exports = app;
 
+
+
 app.post('/', async(req, res, next)=> {
   try {
     const user = await User.findByToken(req.headers.authorization);
