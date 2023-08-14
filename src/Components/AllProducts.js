@@ -27,10 +27,17 @@ const AllProducts = () => {
   }, [products, cart]);
 
   const decrement = (ev) => {
-    setQuantity({
-      ...quantity,
-      [ev.target.name]: quantity[ev.target.name] - 1,
-    });
+    if (quantity[ev.target.name] <= 1) {
+      setQuantity({
+        ...quantity,
+        [ev.target.name]: 0,
+      });
+    } else {
+      setQuantity({
+        ...quantity,
+        [ev.target.name]: quantity[ev.target.name] - 1,
+      });
+    }
   };
 
   const increment = (ev) => {
@@ -52,15 +59,27 @@ const AllProducts = () => {
     }
     let currentQuantity = cartLineItem.quantity;
     let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
-    if (newCartQuantity >= 0) {
-      dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
+    if (newCartQuantity > 0) {
+      if (window.localStorage.getItem('token')) {
+        dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
+      } else {
+        // dispatch(
+        //   editTempCart(...)
+        // );
+      }
     } else {
-      dispatch(
-        removeFromCart({
-          product: cartProduct,
-          quantityToRemove: -newCartQuantity,
-        })
-      );
+      if (window.localStorage.getItem('token')) {
+        dispatch(
+          removeFromCart({
+            product: cartProduct,
+            quantityToRemove: -newCartQuantity,
+          })
+        );
+      } else {
+        // dispatch(
+        //   removeFromTempCart(..)
+        // );
+      }
     }
   };
 
@@ -75,7 +94,7 @@ const AllProducts = () => {
               <li>
                 <span id="large-text">{product.name}</span>
               </li>
-              Cart Quantity: {quantity[product.id]}
+              Quantity: {quantity[product.id] ? quantity[product.id] : 0}
               <br />
               <button
                 name={product.id}

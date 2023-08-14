@@ -1,16 +1,18 @@
-import axios from 'axios';
-
 const SET_CART = 'SET_CART';
 const EDIT_CART = 'EDIT_CART';
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 
 const cart = (state = { lineItems: [] }, action) => {
-  if (action.type === SET_CART) {
-    return action.cart;
+  switch (action.type) {
+    case SET_CART:
+      return action.cart;
+    case EDIT_CART:
+      return action.cart;
+    case REMOVE_FROM_CART:
+      return action.cart;
+    default:
+      return state;
   }
-  if (action.type === EDIT_CART) {
-    return action.cart;
-  }
-  return state;
 };
 
 export const editCart = ({ product, quantity }) => {
