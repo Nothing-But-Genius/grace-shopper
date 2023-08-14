@@ -1,9 +1,13 @@
 import axios from 'axios';
+
+const SET_CART = 'SET_CART';
+const EDIT_CART = 'EDIT_CART';
+
 const cart = (state = { lineItems: [] }, action) => {
-  if (action.type === 'SET_CART') {
+  if (action.type === SET_CART) {
     return action.cart;
   }
-  if (action.type === 'EDIT_CART') {
+  if (action.type === EDIT_CART) {
     return action.cart;
   }
   return state;

@@ -1,12 +1,9 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store';
-import { Link, useParams } from 'react-router-dom';
-
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { editCart, removeFromCart } from '../store/cart';
 const Cart = () => {
   const { cart } = useSelector((state) => state);
   const dispatch = useDispatch();
-
   const decrement = (ev) => {
     let [editLineItem] = cart.lineItems.filter(
       (lineItem) => lineItem.productId === ev.target.name
@@ -19,7 +16,6 @@ const Cart = () => {
       })
     );
   };
-
   const increment = (ev) => {
     let [editLineItem] = cart.lineItems.filter(
       (lineItem) => lineItem.productId === ev.target.name
@@ -32,7 +28,6 @@ const Cart = () => {
       })
     );
   };
-
   const removeLineItemFromCart = (ev) => {
     let [removedLineItem] = cart.lineItems.filter(
       (lineItem) => lineItem.productId === ev.target.name
@@ -44,7 +39,6 @@ const Cart = () => {
       })
     );
   };
-
   return (
     <div>
       <h1>Your Cart</h1>
@@ -93,5 +87,4 @@ const Cart = () => {
     </div>
   );
 };
-
 export default Cart;
