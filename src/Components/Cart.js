@@ -47,41 +47,48 @@ const Cart = () => {
   return (
     <div>
       <h1>Your Cart</h1>
-      <ul id="products-list">
-        <hr />
-        {cart.lineItems.map((lineItem) => {
-          return (
-            <div key={lineItem.id}>
-              <li>
-                <span id="large-text">{lineItem.product.name}</span>
-                <br />
-                Quantity: {lineItem.quantity}
-                <br />
-                <button
-                  name={lineItem.productId}
-                  onClick={(ev) => decrement(ev)}
-                >
-                  -
-                </button>
-                <button
-                  name={lineItem.productId}
-                  onClick={(ev) => increment(ev)}
-                >
-                  +
-                </button>
-                <button
-                  type="button"
-                  name={lineItem.productId}
-                  onClick={(ev) => removeLineItemFromCart(ev)}
-                >
-                  Remove From Cart
-                </button>
-              </li>
-              <hr />
-            </div>
-          );
-        })}
-      </ul>
+      {cart.lineItems.length === 0 ? (
+        <div>
+          <hr />
+          <h2>Your Cart is Empty!</h2>
+        </div>
+      ) : (
+        <ul id="products-list">
+          <hr />
+          {cart.lineItems.map((lineItem) => {
+            return (
+              <div key={lineItem.id}>
+                <li>
+                  <span id="large-text">{lineItem.product.name}</span>
+                  <br />
+                  Quantity: {lineItem.quantity}
+                  <br />
+                  <button
+                    name={lineItem.productId}
+                    onClick={(ev) => decrement(ev)}
+                  >
+                    -
+                  </button>
+                  <button
+                    name={lineItem.productId}
+                    onClick={(ev) => increment(ev)}
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    name={lineItem.productId}
+                    onClick={(ev) => removeLineItemFromCart(ev)}
+                  >
+                    Remove From Cart
+                  </button>
+                </li>
+                <hr />
+              </div>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };

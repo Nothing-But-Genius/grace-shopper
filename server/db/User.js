@@ -58,6 +58,14 @@ User.prototype.getCart = async function () {
         include: [conn.models.product],
       },
     ],
+    order: [
+      [
+        { model: conn.models.lineItem },
+        { model: conn.models.product },
+        'name',
+        'ASC',
+      ],
+    ],
   });
   return cart;
 };

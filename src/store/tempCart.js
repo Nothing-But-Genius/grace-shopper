@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const SET_CART = 'SET_CART';
 const EDIT_CART = 'EDIT_CART';
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART';

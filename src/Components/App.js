@@ -5,7 +5,7 @@ import Cart from './Cart';
 import AllProducts from './AllProducts';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginWithToken, fetchCart } from '../store';
-import { Link, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar';
 
 const App = () => {
@@ -23,7 +23,6 @@ const App = () => {
   return (
     <div>
       <NavBar />
-      {/* {auth.id ? <Home /> : <Login />} */}
       {
         <div>
           <Routes>

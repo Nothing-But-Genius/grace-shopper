@@ -1,14 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
-import { getAllUsers } from "../store/user";
+import React from 'react';
+import { connect } from 'react-redux';
+import { getAllUsers } from '../store/user';
 
 class AllUsers extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     };
   }
 
@@ -18,7 +18,6 @@ class AllUsers extends React.Component {
 
   render() {
     const { users } = this.props;
-    console.log(users);
     return (
       <div>
         <h2>All Users</h2>
