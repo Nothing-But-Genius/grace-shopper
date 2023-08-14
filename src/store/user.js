@@ -17,24 +17,27 @@ export const _createUser = (user) => ({
 
 export const getAllUsers = () => {
   return async (dispatch) => {
-    const response = await axios
+    await axios
       .get("/api/users")
       .then((res) => {
-        dispatch(_getAllUsers(response.data));
+        dispatch(_getAllUsers(res.data));
       })
       .catch((err) => {
         console.log(err);
       });
   };
 };
-export const createUser = (userData) => async (dispatch) => {
-  try {
-    const response = await axios.post("/api/users", userData);
-    const user = response.data;
-    dispatch(createUserSuccess(user));
-  } catch (error) {
-    dispatch(createUserError(error.response.data));
-  }
+export const createUser = (user) => {
+  return async (dispatch) => {
+    await axios
+      .post("/api/users", user)
+      .then((res) => {
+        dispatch(_createUser(res.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 };
 
 const initialState = [];
