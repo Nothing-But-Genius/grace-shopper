@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { editCart, removeFromCart } from '../store/cart';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store';
+import { Link, useParams } from 'react-router-dom';
 
 const Cart = () => {
   const { cart } = useSelector((state) => state);

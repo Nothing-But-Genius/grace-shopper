@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require("express");
 const app = express.Router();
-const { User } = require('../db');
+const { User } = require("../db");
 
 module.exports = app;
 
-app.post('/', async (req, res, next) => {
+app.post("/", async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.createOrder());
@@ -13,7 +13,7 @@ app.post('/', async (req, res, next) => {
   }
 });
 
-app.get('/cart', async (req, res, next) => {
+app.get("/cart", async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.getCart());
@@ -22,7 +22,16 @@ app.get('/cart', async (req, res, next) => {
   }
 });
 
-app.post('/cart', async (req, res, next) => {
+app.get("/cart/:id", async (req, res, next) => {
+  try {
+    const user = await User.findByToken(req.headers.authorization);
+    res.send(await user.getCart(req.params.id));
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.post("/cart", async (req, res, next) => {
   try {
     if (req.headers.authorization.token) {
       const user = await User.findByToken(req.headers.authorization);
@@ -35,7 +44,7 @@ app.post('/cart', async (req, res, next) => {
   }
 });
 
-app.put('/cart', async (req, res, next) => {
+app.put("/cart", async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.removeFromCart(req.body));
