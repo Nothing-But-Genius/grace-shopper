@@ -13,7 +13,6 @@
 - A user should be able to review a product
 - A user should be able to update their profile
 - An administrator should be able to add a new product
-
 # Bonus Features
 - A user should be able to search for products
 - A user should be able to create a wish list
