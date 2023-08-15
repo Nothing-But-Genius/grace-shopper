@@ -19,11 +19,6 @@ const NavBar = () => {
             Palestra Attire
           </Typography>
           <Stack direction="row" spacing={2}>
-            <Button>
-              <NavLink to="/login" style={{ color: "white" }}>
-                Login/Signup
-              </NavLink>
-            </Button>
             {auth.isAdmin === true ? (
               <Button>
                 <NavLink to="/admin" style={{ color: "white" }}>
@@ -31,6 +26,12 @@ const NavBar = () => {
                 </NavLink>
               </Button>
             ) : null}
+            <Button>
+              <NavLink to="/login" style={{ color: "white" }}>
+                Login/Signup
+              </NavLink>
+            </Button>
+
             <Button>
               <NavLink to="/" style={{ color: "white" }}>
                 Home
