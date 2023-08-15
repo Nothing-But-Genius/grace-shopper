@@ -9,6 +9,7 @@ function AddProduct(){
     const [formData, setFormData] = useState({
         name:'',
         details:'',
+        price:'',
     })
 
 //Dispatch thunk when submit is clicked
@@ -40,6 +41,13 @@ function AddProduct(){
                 name = "details"
                 placeholder=" Details"
                 value = {formData.details}
+                onChange = {handleFormChange}
+            />
+            <input 
+                type = "text"
+                name = "price"
+                placeholder="Price"
+                value = {formData.price}
                 onChange = {handleFormChange}
             />
             <button type= "submit"> Submit </button>
