@@ -2,16 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../store/product';
 import { editCart, removeFromCart, fetchCart } from '../store/cart';
+import { setTempCart } from '../store/tempCart';
 
 const AllProducts = () => {
   const { products, cart } = useSelector((state) => state);
   const [quantity, setQuantity] = useState({});
   const dispatch = useDispatch();
+  const [guestCart, setGuestCart] = useState({ lineItems: [] });
 
   useEffect(() => {
     try {
       dispatch(getProducts());
-      dispatch(fetchCart());
+      if (window.localStorage.getItem('token')) {
+        dispatch(fetchCart());
+      } else {
+        // if (window.localStorage.getItem('tempCart') === null) {
+        //   window.localStorage.setItem('tempCart', guestCart);
+        // }
+        // let newCart = window.localStorage.getItem('tempCart');
+        // setGuestCart((prevCart) => {
+        //   return {
+        //     ...prevCart,
+        //     lineItems: newCart.lineItems,
+        //   };
+        // });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -63,8 +78,30 @@ const AllProducts = () => {
       if (window.localStorage.getItem('token')) {
         dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
       } else {
+        // let lineItem = guestCart.lineItems.find((lineItem) => {
+        //   return lineItem.productId === productId;
+        // });
+        // if (lineItem) {
+        //   lineItem.quantity += quantity[productId];
+        //   setGuestCart({ ...guestCart, lineItems: guestCart.lineItems.map((element) => {
+        //     if (element.product.id === productId) {
+        //       return
+        //     }
+        //   })})
+        // } else {
+        //   await conn.models.lineItem.create({
+        //     orderId: cart.id,
+        //     productId: product.id,
+        //     quantity,
+        //   });
+        // }
+        // setGuestCart(guestCart.lineItems.push(cartProduct));
+        console.log(guestCart);
         // dispatch(
-        //   editTempCart(...)
+        //   setTempCart({
+        //     ...tempCart,
+        //     lineItems: tempCart.lineItems.push(cartProduct),
+        //   })
         // );
       }
     } else {
@@ -76,8 +113,12 @@ const AllProducts = () => {
           })
         );
       } else {
+        console.log(guestCart.lineItems);
         // dispatch(
-        //   removeFromTempCart(..)
+        //   setTempCart({
+        //     ...tempCart,
+        //     lineItems: tempCart.lineItems.push(cartProduct),
+        //   })
         // );
       }
     }

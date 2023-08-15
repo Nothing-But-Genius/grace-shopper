@@ -5,18 +5,19 @@ import { Link } from 'react-router-dom';
 import CreateUser from './CreateUser';
 import NewProductButton from './NewProductButton';
 
-
-
 const Home = () => {
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
-
 
   return (
     <div>
       <h1>Home</h1>
       <div>
-        Welcome {auth.username}!!
+        {auth.username ? (
+          <span>Welcome {auth.username}!!</span>
+        ) : (
+          <span>Welcome Guest!!</span>
+        )}
         <button onClick={() => dispatch(logout())}>Logout</button>
       </div>
       <NewProductButton />
