@@ -1,3 +1,4 @@
+
 import React, {useState} from "react"
 import { useDispatch } from "react-redux"
 import { addProduct } from "../store/product"
@@ -56,7 +57,3 @@ function AddProduct(){
     )
 
 }
-
-
-
-export default AddProduct

@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getProducts } from '../store/product';
-import { editCart, removeFromCart, fetchCart } from '../store/cart';
+
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getProducts } from "../store/product";
+import { editCart, removeFromCart, fetchCart } from "../store/cart";
+import { deleteProduct } from "../store/product";
+import NewProductButton from "./NewProductButton";
+import DeleteProductButton from "./DeleteProductButton";
 import { Link } from "react-router-dom"
-import Product from './Product';
+
 
 const AllProducts = () => {
   const { products, cart } = useSelector((state) => state);
@@ -27,6 +31,10 @@ const AllProducts = () => {
       quantity[lineItem.product.id] = lineItem.quantity;
     });
   }, [products, cart]);
+
+  const deleteProductFromStore = (productId) => {
+    dispatch(deleteProduct(productId));
+  };
 
   const decrement = (ev) => {
     if (quantity[ev.target.name] <= 1) {
@@ -62,7 +70,7 @@ const AllProducts = () => {
     let currentQuantity = cartLineItem.quantity;
     let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
     if (newCartQuantity > 0) {
-      if (window.localStorage.getItem('token')) {
+      if (window.localStorage.getItem("token")) {
         dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
       } else {
         // dispatch(
@@ -70,7 +78,7 @@ const AllProducts = () => {
         // );
       }
     } else {
-      if (window.localStorage.getItem('token')) {
+      if (window.localStorage.getItem("token")) {
         dispatch(
           removeFromCart({
             product: cartProduct,
@@ -85,9 +93,12 @@ const AllProducts = () => {
     }
   };
 
+  const { auth } = useSelector((state) => state);
+
   return (
     <div id="allProducts">
       <h1>All Products</h1>
+      {auth.isAdmin === true ? <NewProductButton /> : []}
       <ul>
         <hr />
         {products.map((product) => {
@@ -101,25 +112,28 @@ const AllProducts = () => {
               </li>
               Quantity: {quantity[product.id] ? quantity[product.id] : 0}
               <br />
-              <button
-                name={product.id}
-                onClick={(ev) => decrement(ev)}
-              >
+              <button name={product.id} onClick={(ev) => decrement(ev)}>
                 -
               </button>
-              <button
-                name={product.id}
-                onClick={(ev) => increment(ev)}
-              >
+              <button name={product.id} onClick={(ev) => increment(ev)}>
                 +
               </button>
               <button
                 type="button"
                 value={product.id}
+
                 onClick={(ev) => addProdToCart(ev.target.value)}
               >
                 Add to Cart
+
+
               </button>
+              {auth.isAdmin === true ? (
+                <DeleteProductButton
+                  productId={product.id}
+                  handleDelete={deleteProductFromStore}
+                />
+              ) : null}
               <hr />
             </div>
           );
