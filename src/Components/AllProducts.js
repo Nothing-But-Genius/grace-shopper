@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../store/product';
 import { editCart, removeFromCart, fetchCart } from '../store/cart';
-import { setTempCart } from '../store/tempCart';
+import { deleteProduct } from '../store/product';
+import NewProductButton from './NewProductButton';
+import DeleteProductButton from './DeleteProductButton';
+import { Link } from 'react-router-dom';
 
 const AllProducts = () => {
   const { products, cart } = useSelector((state) => state);
@@ -40,6 +43,10 @@ const AllProducts = () => {
       quantity[lineItem.product.id] = lineItem.quantity;
     });
   }, [products, cart]);
+
+  const deleteProductFromStore = (productId) => {
+    dispatch(deleteProduct(productId));
+  };
 
   const decrement = (ev) => {
     if (quantity[ev.target.name] <= 1) {
@@ -124,16 +131,25 @@ const AllProducts = () => {
     }
   };
 
+  const { auth } = useSelector((state) => state);
+
   return (
     <div id="allProducts">
       <h1>All Products</h1>
+      {auth.isAdmin === true ? <NewProductButton /> : []}
       <ul>
         <hr />
         {products.map((product) => {
           return (
             <div key={product.id}>
               <li>
-                <span id="large-text">{product.name}</span>
+                <Link
+                  to={`/products/${product.id}`}
+                  replace
+                >
+                  <span id="large-text">{product.name} </span>
+                </Link>
+                <div> Price : ${product.price}</div>
               </li>
               Quantity: {quantity[product.id] ? quantity[product.id] : 0}
               <br />
@@ -154,8 +170,14 @@ const AllProducts = () => {
                 value={product.id}
                 onClick={(ev) => addProdToCart(ev.target.value)}
               >
-                Update Cart
+                Add to Cart
               </button>
+              {auth.isAdmin === true ? (
+                <DeleteProductButton
+                  productId={product.id}
+                  handleDelete={deleteProductFromStore}
+                />
+              ) : null}
               <hr />
             </div>
           );

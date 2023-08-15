@@ -34,9 +34,9 @@ export default function BasicModal() {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Registration
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <div id="modal-modal-description" sx={{ mt: 2 }}>
             <CreateUser />
-          </Typography>
+          </div>
         </Box>
       </Modal>
     </div>
