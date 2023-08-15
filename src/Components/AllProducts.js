@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts } from "../store/product";
@@ -5,6 +6,8 @@ import { editCart, removeFromCart, fetchCart } from "../store/cart";
 import { deleteProduct } from "../store/product";
 import NewProductButton from "./NewProductButton";
 import DeleteProductButton from "./DeleteProductButton";
+import { Link } from "react-router-dom"
+
 
 const AllProducts = () => {
   const { products, cart } = useSelector((state) => state);
@@ -102,7 +105,10 @@ const AllProducts = () => {
           return (
             <div key={product.id}>
               <li>
-                <span id="large-text">{product.name}</span>
+                <Link to = {`/products/${product.id}`} replace> 
+                <span id="large-text">{product.name} </span>
+                </Link>
+                <div> Price : ${product.price}</div>
               </li>
               Quantity: {quantity[product.id] ? quantity[product.id] : 0}
               <br />
@@ -115,8 +121,12 @@ const AllProducts = () => {
               <button
                 type="button"
                 value={product.id}
-                onClick={(ev) => addProdToCart(ev.target.value)}>
-                Update Cart
+
+                onClick={(ev) => addProdToCart(ev.target.value)}
+              >
+                Add to Cart
+
+
               </button>
               {auth.isAdmin === true ? (
                 <DeleteProductButton

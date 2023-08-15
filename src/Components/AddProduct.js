@@ -1,47 +1,59 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addProduct } from "../store/product";
 
-export default function AddProduct() {
-  const dispatch = useDispatch();
+import React, {useState} from "react"
+import { useDispatch } from "react-redux"
+import { addProduct } from "../store/product"
 
-  const [formData, setFormData] = useState({
-    name: "",
-    details: "",
-  });
 
-  //Dispatch thunk when submit is clicked
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    dispatch(addProduct(formData));
-  };
+function AddProduct(){
+    const dispatch = useDispatch()
 
-  // functional component to handle form change
-  const handleFormChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
+    const [formData, setFormData] = useState({
+        name:'',
+        details:'',
+        price:'',
+    })
 
-  return (
-    <form onSubmit={handleFormSubmit}>
-      <input
-        type="text"
-        name="name"
-        placeholder="Product Name"
-        value={formData.name}
-        onChange={handleFormChange}
-      />
-      <input
-        type="text"
-        name="details"
-        placeholder=" Details"
-        value={formData.details}
-        onChange={handleFormChange}
-      />
-      <button type="submit"> Submit </button>
-    </form>
-  );
+//Dispatch thunk when submit is clicked
+    const handleFormSubmit = (event) => {
+        event.preventDefault()
+        dispatch(addProduct(formData))
+    }
+
+// functional component to handle form change
+    const handleFormChange = (event) => {
+        const{ name, value } = event.target
+        setFormData((prevFormData)=>({
+            ...prevFormData,
+            [name]: value,
+        }))
+    }
+
+    return (
+        <form onSubmit={handleFormSubmit} >
+            <input 
+                type = "text"
+                name = "name"
+                placeholder= "Product Name"
+                value = {formData.name}
+                onChange = {handleFormChange}
+            />
+            <input 
+                type = "text"
+                name = "details"
+                placeholder=" Details"
+                value = {formData.details}
+                onChange = {handleFormChange}
+            />
+            <input 
+                type = "text"
+                name = "price"
+                placeholder="Price"
+                value = {formData.price}
+                onChange = {handleFormChange}
+            />
+            <button type= "submit"> Submit </button>
+        </form>
+
+    )
+
 }
