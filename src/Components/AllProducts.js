@@ -8,7 +8,7 @@ import DeleteProductButton from './DeleteProductButton';
 import { Link } from 'react-router-dom';
 
 const AllProducts = () => {
-  const { products, cart } = useSelector((state) => state);
+  const { products, cart, auth } = useSelector((state) => state);
   const [quantity, setQuantity] = useState({});
   const dispatch = useDispatch();
   const [guestCart, setGuestCart] = useState({ lineItems: [] });
@@ -16,19 +16,15 @@ const AllProducts = () => {
   useEffect(() => {
     try {
       dispatch(getProducts());
-      if (window.localStorage.getItem('token')) {
+      if (auth.id) {
         dispatch(fetchCart());
       } else {
-        // if (window.localStorage.getItem('tempCart') === null) {
-        //   window.localStorage.setItem('tempCart', guestCart);
-        // }
-        // let newCart = window.localStorage.getItem('tempCart');
-        // setGuestCart((prevCart) => {
-        //   return {
-        //     ...prevCart,
-        //     lineItems: newCart.lineItems,
-        //   };
-        // });
+        let tempCart = JSON.parse(window.localStorage.getItem('tempCart'));
+        if (!tempCart.lineItems) {
+          tempCart = { lineItems: [] };
+          window.localStorage.setItem('tempCart', JSON.stringify(tempCart));
+        }
+        setGuestCart(tempCart);
       }
     } catch (error) {
       console.log(error);
@@ -39,10 +35,16 @@ const AllProducts = () => {
     products.forEach((product) => {
       quantity[product.id] = 0;
     });
-    cart.lineItems.forEach((lineItem) => {
-      quantity[lineItem.product.id] = lineItem.quantity;
-    });
-  }, [products, cart]);
+    if (auth.id) {
+      cart.lineItems.forEach((lineItem) => {
+        quantity[lineItem.product.id] = lineItem.quantity;
+      });
+    } else {
+      guestCart.lineItems.forEach((lineItem) => {
+        quantity[lineItem.product.id] = lineItem.quantity;
+      });
+    }
+  }, [products, cart, guestCart]);
 
   const deleteProductFromStore = (productId) => {
     dispatch(deleteProduct(productId));
@@ -82,37 +84,33 @@ const AllProducts = () => {
     let currentQuantity = cartLineItem.quantity;
     let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
     if (newCartQuantity > 0) {
-      if (window.localStorage.getItem('token')) {
+      if (auth.id) {
         dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
       } else {
-        // let lineItem = guestCart.lineItems.find((lineItem) => {
-        //   return lineItem.productId === productId;
-        // });
-        // if (lineItem) {
-        //   lineItem.quantity += quantity[productId];
-        //   setGuestCart({ ...guestCart, lineItems: guestCart.lineItems.map((element) => {
-        //     if (element.product.id === productId) {
-        //       return
-        //     }
-        //   })})
-        // } else {
-        //   await conn.models.lineItem.create({
-        //     orderId: cart.id,
-        //     productId: product.id,
-        //     quantity,
-        //   });
-        // }
-        // setGuestCart(guestCart.lineItems.push(cartProduct));
-        console.log(guestCart);
-        // dispatch(
-        //   setTempCart({
-        //     ...tempCart,
-        //     lineItems: tempCart.lineItems.push(cartProduct),
-        //   })
-        // );
+        let newCart = guestCart;
+        let lineItemLocation = 0;
+        let lineItem = guestCart.lineItems.find((lineItem, index) => {
+          if (lineItem.product.id === cartProduct.id) {
+            lineItemLocation = index;
+          }
+          return lineItem.product.id === cartProduct.id;
+        });
+        if (lineItem) {
+          lineItem.quantity += quantity[productId];
+          newCart.lineItems[lineItemLocation] = lineItem;
+          setGuestCart(newCart);
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+        } else {
+          newCart.lineItems.push({
+            product: cartProduct,
+            quantity: newCartQuantity,
+          });
+          setGuestCart(newCart);
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+        }
       }
     } else {
-      if (window.localStorage.getItem('token')) {
+      if (auth.id) {
         dispatch(
           removeFromCart({
             product: cartProduct,
@@ -120,18 +118,30 @@ const AllProducts = () => {
           })
         );
       } else {
-        console.log(guestCart.lineItems);
-        // dispatch(
-        //   setTempCart({
-        //     ...tempCart,
-        //     lineItems: tempCart.lineItems.push(cartProduct),
-        //   })
-        // );
+        let newCart = guestCart;
+        let lineItemLocation = 0;
+        let lineItem = guestCart.lineItems.find((lineItem, index) => {
+          if (lineItem.product.id === productId) {
+            lineItemLocation = index;
+          }
+          return lineItem.product.id === cartProduct.id;
+        });
+        if (lineItem) {
+          lineItem.quantity -= quantity[productId];
+          newCart.lineItems[lineItemLocation] = lineItem;
+          setGuestCart(newCart);
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+        } else {
+          newCart.lineItems.push({
+            product: cartProduct,
+            quantity: newCartQuantity,
+          });
+          setGuestCart(newCart);
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+        }
       }
     }
   };
-
-  const { auth } = useSelector((state) => state);
 
   return (
     <div id="allProducts">
@@ -170,7 +180,7 @@ const AllProducts = () => {
                 value={product.id}
                 onClick={(ev) => addProdToCart(ev.target.value)}
               >
-                Add to Cart
+                Update Cart
               </button>
               {auth.isAdmin === true ? (
                 <DeleteProductButton

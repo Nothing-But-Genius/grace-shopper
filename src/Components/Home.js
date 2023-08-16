@@ -6,8 +6,6 @@ const Home = () => {
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  console.log(auth.isAdmin === true);
-
   return (
     <div>
       <h1>Home</h1>
