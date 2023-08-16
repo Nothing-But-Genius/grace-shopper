@@ -5,26 +5,16 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import CreateUser from "./CreateUser";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-export default function BasicModal() {
+export default function RegisterButton() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button onClick={handleOpen}>Register</Button>
+      <button id="registerButton" onClick={handleOpen}>
+        Register
+      </button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -32,13 +22,22 @@ export default function BasicModal() {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Registration
+            Register
           </Typography>
-          <div id="modal-modal-description" sx={{ mt: 2 }}>
-            <CreateUser />
-          </div>
+          <CreateUser />
         </Box>
       </Modal>
     </div>
   );
 }
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};

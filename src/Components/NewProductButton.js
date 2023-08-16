@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import AddProduct from "./AddProduct";
-import { formHelperTextClasses } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -16,10 +15,9 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-
 };
 
-export default function NewProductButton() {
+function NewProductButton() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,11 +34,13 @@ export default function NewProductButton() {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Add Product
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <div id="modal-modal-description" sx={{ mt: 2 }}>
             <AddProduct />
-          </Typography>
+          </div>
         </Box>
       </Modal>
     </div>
   );
 }
+
+export default NewProductButton;

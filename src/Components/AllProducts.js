@@ -1,19 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getProducts } from '../store/product';
-import { editCart, removeFromCart, fetchCart } from '../store/cart';
-import { Link } from "react-router-dom"
-import Product from './Product';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getProducts } from "../store/product";
+import { editCart, removeFromCart, fetchCart } from "../store/cart";
+import { deleteProduct } from "../store/product";
+import NewProductButton from "./NewProductButton";
+import DeleteProductButton from "./DeleteProductButton";
+import { Link } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const AllProducts = () => {
-  const { products, cart } = useSelector((state) => state);
+  const { products, cart, auth } = useSelector((state) => state);
   const [quantity, setQuantity] = useState({});
   const dispatch = useDispatch();
+  const [guestCart, setGuestCart] = useState({ lineItems: [] });
 
   useEffect(() => {
     try {
       dispatch(getProducts());
-      dispatch(fetchCart());
+      if (auth.id) {
+        dispatch(fetchCart());
+      } else {
+        let tempCart = JSON.parse(window.localStorage.getItem("tempCart"));
+        if (!tempCart || !tempCart.lineItems) {
+          tempCart = { lineItems: [] };
+          window.localStorage.setItem("tempCart", JSON.stringify(tempCart));
+        }
+        setGuestCart(tempCart);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -23,10 +41,20 @@ const AllProducts = () => {
     products.forEach((product) => {
       quantity[product.id] = 0;
     });
-    cart.lineItems.forEach((lineItem) => {
-      quantity[lineItem.product.id] = lineItem.quantity;
-    });
-  }, [products, cart]);
+    if (auth.id) {
+      cart.lineItems.forEach((lineItem) => {
+        quantity[lineItem.product.id] = lineItem.quantity;
+      });
+    } else {
+      guestCart.lineItems.forEach((lineItem) => {
+        quantity[lineItem.product.id] = lineItem.quantity;
+      });
+    }
+  }, [products, cart, guestCart]);
+
+  const deleteProductFromStore = (productId) => {
+    dispatch(deleteProduct(productId));
+  };
 
   const decrement = (ev) => {
     if (quantity[ev.target.name] <= 1) {
@@ -62,15 +90,33 @@ const AllProducts = () => {
     let currentQuantity = cartLineItem.quantity;
     let newCartQuantity = quantity[cartProduct.id] - currentQuantity;
     if (newCartQuantity > 0) {
-      if (window.localStorage.getItem('token')) {
+      if (auth.id) {
         dispatch(editCart({ product: cartProduct, quantity: newCartQuantity }));
       } else {
-        // dispatch(
-        //   editTempCart(...)
-        // );
+        let newCart = guestCart;
+        let lineItemLocation = 0;
+        let lineItem = guestCart.lineItems.find((lineItem, index) => {
+          if (lineItem.product.id === cartProduct.id) {
+            lineItemLocation = index;
+          }
+          return lineItem.product.id === cartProduct.id;
+        });
+        if (lineItem) {
+          lineItem.quantity += quantity[productId];
+          newCart.lineItems[lineItemLocation] = lineItem;
+          setGuestCart(newCart);
+          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+        } else {
+          newCart.lineItems.push({
+            product: cartProduct,
+            quantity: newCartQuantity,
+          });
+          setGuestCart(newCart);
+          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+        }
       }
     } else {
-      if (window.localStorage.getItem('token')) {
+      if (auth.id) {
         dispatch(
           removeFromCart({
             product: cartProduct,
@@ -78,53 +124,88 @@ const AllProducts = () => {
           })
         );
       } else {
-        // dispatch(
-        //   removeFromTempCart(..)
-        // );
+        let newCart = guestCart;
+        let lineItemLocation = 0;
+        let lineItem = guestCart.lineItems.find((lineItem, index) => {
+          if (lineItem.product.id === productId) {
+            lineItemLocation = index;
+          }
+          return lineItem.product.id === cartProduct.id;
+        });
+        if (lineItem) {
+          lineItem.quantity -= quantity[productId];
+          newCart.lineItems[lineItemLocation] = lineItem;
+          setGuestCart(newCart);
+          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+        } else {
+          newCart.lineItems.push({
+            product: cartProduct,
+            quantity: newCartQuantity,
+          });
+          setGuestCart(newCart);
+          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+        }
       }
     }
   };
+  console.log("PRODUCTS TEST", products);
 
   return (
     <div id="allProducts">
       <h1>All Products</h1>
-      <ul>
-        <hr />
-        {products.map((product) => {
-          return (
-            <div key={product.id}>
-              <li>
-                <Link to = {`/products/${product.id}`} replace> 
-                <span id="large-text">{product.name} </span>
-                </Link>
-                <div> Price : ${product.price}</div>
-              </li>
-              Quantity: {quantity[product.id] ? quantity[product.id] : 0}
-              <br />
-              <button
-                name={product.id}
-                onClick={(ev) => decrement(ev)}
-              >
-                -
-              </button>
-              <button
-                name={product.id}
-                onClick={(ev) => increment(ev)}
-              >
-                +
-              </button>
-              <button
-                type="button"
-                value={product.id}
-                onClick={(ev) => addProdToCart(ev.target.value)}
-              >
-                Add to Cart
-              </button>
-              <hr />
-            </div>
-          );
-        })}
-      </ul>
+      {auth.isAdmin === true ? <NewProductButton /> : null}
+
+      <div className="productsContainer">
+        {products.map((product) => (
+          <div key={product.id} className="productCard">
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                sx={{ height: 200 }} /* Reduced from 140 to 100 */
+                image={product.imageUrl}
+                title={product.name}
+              />
+              <CardContent style={{ padding: "8px" }}>
+                <div>
+                  <Link to={`/products/${product.id}`} replace>
+                    <Typography gutterBottom variant="body1" id="large-text">
+                      {product.name}
+                    </Typography>
+                  </Link>
+                  <Typography variant="caption">
+                    Price: ${product.price}
+                  </Typography>
+                </div>
+                <Typography>
+                  Quantity: {quantity[product.id] ? quantity[product.id] : 0}
+                </Typography>
+              </CardContent>
+
+              <CardActions>
+                <Button name={product.id} onClick={(ev) => decrement(ev)}>
+                  -
+                </Button>
+                <Button name={product.id} onClick={(ev) => increment(ev)}>
+                  +
+                </Button>
+                <Button
+                  size="small"
+                  type="button"
+                  value={product.id}
+                  onClick={(ev) => addProdToCart(ev.target.value)}>
+                  Add to Cart
+                </Button>
+              </CardActions>
+
+              {auth.isAdmin && (
+                <DeleteProductButton
+                  productId={product.id}
+                  handleDelete={deleteProductFromStore}
+                />
+              )}
+            </Card>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

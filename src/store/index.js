@@ -6,7 +6,11 @@ import cart from "./cart";
 import productsReducer from "./product";
 import userReducer from "./user";
 import guest from "./guest";
+<<<<<<< HEAD
 import singleProductReducer from "./singleProduct";
+=======
+import { _deleteProduct } from "./product";
+>>>>>>> main
 
 const reducer = combineReducers({
   auth,
@@ -14,7 +18,11 @@ const reducer = combineReducers({
   products: productsReducer,
   users: userReducer,
   guest,
+<<<<<<< HEAD
   product:singleProductReducer,
+=======
+  _deleteProduct: productsReducer,
+>>>>>>> main
 });
 
 const store = createStore(reducer, applyMiddleware(thunk, logger));
