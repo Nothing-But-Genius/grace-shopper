@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../store/product';
@@ -153,11 +154,12 @@ const AllProducts = () => {
           return (
             <div key={product.id}>
               <li>
+
                 <Link
                   to={`/products/${product.id}`}
                   replace
                 >
-                  <span id="large-text">{product.name} </span>
+    <span id="large-text">{product.name} </span>
                 </Link>
                 <div> Price : ${product.price}</div>
               </li>
@@ -178,9 +180,10 @@ const AllProducts = () => {
               <button
                 type="button"
                 value={product.id}
-                onClick={(ev) => addProdToCart(ev.target.value)}
-              >
-                Update Cart
+
+                onClick={(ev) => addProdToCart(ev.target.value)}>
+                Add to Cart
+
               </button>
               {auth.isAdmin === true ? (
                 <DeleteProductButton

@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCart, removeFromCart, fetchCart, placeOrder } from '../store/cart';
+
 
 const Cart = () => {
   const { cart, auth } = useSelector((state) => state);
@@ -128,6 +130,7 @@ const Cart = () => {
       ) : (
         <ul id="products-list">
           <hr />
+
           {auth.id
             ? cart.lineItems.map((lineItem) => {
                 return (
@@ -193,6 +196,7 @@ const Cart = () => {
                   </div>
                 );
               })}
+
         </ul>
       )}
       <button onClick={() => placeCartOrder()}>Place Order</button>
