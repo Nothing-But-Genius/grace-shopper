@@ -113,3 +113,30 @@ html {
   flex-direction: column;
   padding: 10px 5px 20px 3px;
 }
+
+
+#allProducts {
+  width: 100%;
+  padding: 20px;
+}
+
+.productsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  /* Aligns items to the start of the container */
+  gap: 15px;
+  /* Adjust the gap between cards. Decrease if you want them closer */
+}
+
+.productCard {
+  flex: 1;
+  width: 275px;
+  /* Adjust as needed */
+  max-width: 275px;
+  /* Adjust as needed */
+}
+
+#large-text {
+  font-size: 1.25rem;
+}

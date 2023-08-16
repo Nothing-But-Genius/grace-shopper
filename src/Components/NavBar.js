@@ -29,7 +29,13 @@ const NavBar = () => {
                 </NavLink>
               </Button>
             ) : null}
-
+            {!auth || Object.keys(auth).length === 0 ? null : (
+              <Button>
+                <NavLink to="/profile" style={{ color: "white" }}>
+                  Profile
+                </NavLink>
+              </Button>
+            )}
             <Button>
               <NavLink to="/" style={{ color: "white" }}>
                 Home
