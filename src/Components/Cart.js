@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { editCart, removeFromCart } from '../store/cart';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { editCart, removeFromCart } from "../store/cart";
+
 const Cart = () => {
   const { cart } = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -60,21 +61,18 @@ const Cart = () => {
                   <br />
                   <button
                     name={lineItem.productId}
-                    onClick={(ev) => decrement(ev)}
-                  >
+                    onClick={(ev) => decrement(ev)}>
                     -
                   </button>
                   <button
                     name={lineItem.productId}
-                    onClick={(ev) => increment(ev)}
-                  >
+                    onClick={(ev) => increment(ev)}>
                     +
                   </button>
                   <button
                     type="button"
                     name={lineItem.productId}
-                    onClick={(ev) => removeLineItemFromCart(ev)}
-                  >
+                    onClick={(ev) => removeLineItemFromCart(ev)}>
                     Remove From Cart
                   </button>
                 </li>
