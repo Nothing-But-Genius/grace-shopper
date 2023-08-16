@@ -7,12 +7,15 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ShoppingCart } from "phosphor-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store";
 
 const NavBar = () => {
   const { auth } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, background: "white" }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -26,12 +29,6 @@ const NavBar = () => {
                 </NavLink>
               </Button>
             ) : null}
-
-            <Button>
-              <NavLink to="/login" style={{ color: "white" }}>
-                Login/Signup
-              </NavLink>
-            </Button>
 
             <Button>
               <NavLink to="/" style={{ color: "white" }}>
@@ -48,6 +45,19 @@ const NavBar = () => {
                 <ShoppingCart size="28" />
               </NavLink>
             </Button>
+            {!auth || Object.keys(auth).length === 0 ? (
+              <Button>
+                <NavLink to="/login" style={{ color: "white" }}>
+                  Login/Signup
+                </NavLink>
+              </Button>
+            ) : (
+              <Button onClick={() => dispatch(logout())}>
+                <NavLink to="/login" style={{ color: "white" }}>
+                  Logout
+                </NavLink>
+              </Button>
+            )}
           </Stack>
         </Toolbar>
       </AppBar>
