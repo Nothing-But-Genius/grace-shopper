@@ -7,6 +7,7 @@ import NewProductButton from './NewProductButton';
 
 
 
+
 const Home = () => {
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const Home = () => {
         <button onClick={() => dispatch(logout())}>Logout</button>
       </div>
       <NewProductButton />
+
     </div>
   );
 };

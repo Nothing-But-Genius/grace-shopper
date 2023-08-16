@@ -1,19 +1,34 @@
-import React from "react"
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react"
 import ProductDetails from  "./ProductDetails"
-
+import { getSingleProduct } from "../store/singleProduct";
+import { fetchSingleProduct } from "../store/singleProduct";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Route, Link } from "react-router-dom"
 
 
 
 
-const Product = (props) => {
-    const { products, productID} = props
+const Product = () => {
+  const product = useSelector((state) => state.product)
+  const { productId } = useParams()
+  const dispatch =  useDispatch()
 
-    const product = products.find((product) => product.id == productID)
+
+
+  useEffect (()=> {
+    if(productId) fetchSingleProduct()
+  }, [productId]) 
+  
+  // const { id, name , details, price} = product
 
     return (
         <div className="product-wrapper">
+          <div>
+  <h1>{`${name}`}</h1>
+  <h2>{`${details}`}</h2>
+  <h3>{`${price}`}</h3>
+</div>
       <div className="product-header">
         <div className="image-wrapper">
           <img src={product.imageUrl} alt={product.name} />
@@ -26,8 +41,8 @@ const Product = (props) => {
 
       <div className="product-sub-nav">
         {/* Links to `<current url>/reviews` and `<current url>/description` */}
-        <Link to={`/products/${productID}/details`}>Description</Link>
-        <Link to={`/products/${productID}/reviews`}>Reviews</Link>
+        <Link to={`/products/${productId}/details`}>Description</Link>
+        <Link to={`/products/${productId}/reviews`}>Reviews</Link>
       </div>
 
 
@@ -47,9 +62,5 @@ const Product = (props) => {
 
 }
 
-const mapStateToProps = () => {
 
-}
-
-
-export default connect (mapStateToProps)(Product)
+export default Product

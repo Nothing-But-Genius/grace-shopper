@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginWithToken, fetchCart } from '../store';
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar';
+import Product from './Product';
 
 const App = () => {
   const { auth } = useSelector((state) => state);
@@ -30,6 +31,9 @@ const App = () => {
               path="/cart"
               element={<Cart />}
             />
+            <Route 
+              path ='/products/:id' 
+              exact component = {<Product />}/>
             <Route
               path="/products"
               element={<AllProducts />}
