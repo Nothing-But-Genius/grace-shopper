@@ -15,7 +15,17 @@ app.post("/", isUserValid, async (req, res, next) => {
 
 app.get("/", async (req, res, next) => {
   try {
-    res.send(await User.findByToken(req.headers.authorization));
+    if (!req.headers.authorization) {
+      return res.status(401).json({ message: "Token not provided" });
+    }
+
+    const user = await User.findByToken(req.headers.authorization);
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    res.send(user);
   } catch (ex) {
     next(ex);
   }

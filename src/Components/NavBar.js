@@ -26,6 +26,7 @@ const NavBar = () => {
                 </NavLink>
               </Button>
             ) : null}
+
             <Button>
               <NavLink to="/login" style={{ color: "white" }}>
                 Login/Signup

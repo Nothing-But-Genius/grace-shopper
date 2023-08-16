@@ -19,16 +19,23 @@ const Login = () => {
   const login = async (ev) => {
     ev.preventDefault();
     const isSuccess = await dispatch(attemptLogin(credentials));
-
     if (isSuccess) {
       history("/");
+    } else {
+      console.log("bad credentials");
     }
   };
 
-  const registerUser = (ev) => {
+  const registerUser = async (ev) => {
     ev.preventDefault();
-    // Assuming you've structured your credentials the same way for registration
-    dispatch(attemptRegister(credentials));
+
+    const isSuccess = await dispatch(attemptRegister(credentials));
+
+    if (isSuccess) {
+      history("/");
+    } else {
+      console.log("User Already Exist");
+    }
   };
 
   return (
