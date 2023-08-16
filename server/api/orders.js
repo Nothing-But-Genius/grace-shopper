@@ -6,7 +6,7 @@ module.exports = app;
 
 app.post('/', async (req, res, next) => {
   try {
-    const user = await User.findByToken(req.headers.authorization);
+    const user = await User.findByToken(req.body.authorization);
     res.send(await user.createOrder());
   } catch (ex) {
     next(ex);

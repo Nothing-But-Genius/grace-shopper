@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { editCart, removeFromCart, fetchCart } from '../store/cart';
-import tempCart from '../store/tempCart';
+import { editCart, removeFromCart, fetchCart, placeOrder } from '../store/cart';
 
 const Cart = () => {
   const { cart, auth } = useSelector((state) => state);
@@ -110,6 +109,14 @@ const Cart = () => {
       window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
     }
   };
+
+  const placeCartOrder = () => {
+    if (auth.id) {
+      dispatch(placeOrder());
+    }
+    return;
+  };
+
   return (
     <div>
       <h1>Your Cart</h1>
@@ -188,6 +195,7 @@ const Cart = () => {
               })}
         </ul>
       )}
+      <button onClick={() => placeCartOrder()}>Place Order</button>
     </div>
   );
 };

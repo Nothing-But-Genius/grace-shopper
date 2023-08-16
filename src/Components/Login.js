@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { attemptLogin } from "../store";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { attemptLogin } from '../store';
+import { useDispatch } from 'react-redux';
 
-import RegisterButton from "./RegisterButton";
+import RegisterButton from './RegisterButton';
 
 const Login = () => {
   const dispatch = useDispatch();
 
   const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
   const onChange = (ev) => {
@@ -18,13 +18,15 @@ const Login = () => {
 
   const login = (ev) => {
     ev.preventDefault();
-    dispatch(attemptLogin(credentials));
+    if (credentials.username !== '') {
+      dispatch(attemptLogin(credentials));
+    }
   };
 
   return (
     <div>
       <h2>Login</h2>
-      <form onSubmit={login}>
+      <form onSubmit={(ev) => login(ev)}>
         <label htmlFor="username">Username:</label>
         <input
           id="username"
