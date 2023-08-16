@@ -6,6 +6,12 @@ import { deleteProduct } from "../store/product";
 import NewProductButton from "./NewProductButton";
 import DeleteProductButton from "./DeleteProductButton";
 import { Link } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const AllProducts = () => {
   const { products, cart, auth } = useSelector((state) => state);
@@ -142,47 +148,64 @@ const AllProducts = () => {
       }
     }
   };
+  console.log("PRODUCTS TEST", products);
 
   return (
     <div id="allProducts">
       <h1>All Products</h1>
-      {auth.isAdmin === true ? <NewProductButton /> : []}
-      <ul>
-        <hr />
-        {products.map((product) => {
-          return (
-            <div key={product.id}>
-              <li>
-                <Link to={`/products/${product.id}`} replace>
-                  <span id="large-text">{product.name} </span>
-                </Link>
-                <div> Price : ${product.price}</div>
-              </li>
-              Quantity: {quantity[product.id] ? quantity[product.id] : 0}
-              <br />
-              <button name={product.id} onClick={(ev) => decrement(ev)}>
-                -
-              </button>
-              <button name={product.id} onClick={(ev) => increment(ev)}>
-                +
-              </button>
-              <button
-                type="button"
-                value={product.id}
-                onClick={(ev) => addProdToCart(ev.target.value)}>
-                Add to Cart
-              </button>
-              {auth.isAdmin === true ? (
+      {auth.isAdmin === true ? <NewProductButton /> : null}
+
+      <div className="productsContainer">
+        {products.map((product) => (
+          <div key={product.id} className="productCard">
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                sx={{ height: 200 }} /* Reduced from 140 to 100 */
+                image={product.imageUrl}
+                title={product.name}
+              />
+              <CardContent style={{ padding: "8px" }}>
+                <div>
+                  <Link to={`/products/${product.id}`} replace>
+                    <Typography gutterBottom variant="body1" id="large-text">
+                      {product.name}
+                    </Typography>
+                  </Link>
+                  <Typography variant="caption">
+                    Price: ${product.price}
+                  </Typography>
+                </div>
+                <Typography>
+                  Quantity: {quantity[product.id] ? quantity[product.id] : 0}
+                </Typography>
+              </CardContent>
+
+              <CardActions>
+                <Button name={product.id} onClick={(ev) => decrement(ev)}>
+                  -
+                </Button>
+                <Button name={product.id} onClick={(ev) => increment(ev)}>
+                  +
+                </Button>
+                <Button
+                  size="small"
+                  type="button"
+                  value={product.id}
+                  onClick={(ev) => addProdToCart(ev.target.value)}>
+                  Add to Cart
+                </Button>
+              </CardActions>
+
+              {auth.isAdmin && (
                 <DeleteProductButton
                   productId={product.id}
                   handleDelete={deleteProductFromStore}
                 />
-              ) : null}
-              <hr />
-            </div>
-          );
-        })}
-      </ul>
+              )}
+            </Card>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
