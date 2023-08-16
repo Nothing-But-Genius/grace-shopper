@@ -21,7 +21,6 @@ import { loginWithToken, fetchCart } from "../store";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./NavBar";
 import Profile from "./Profile";
->>>>>>> main
 
 const App = () => {
   const { auth } = useSelector((state) => state);
@@ -41,34 +40,12 @@ const App = () => {
       {
         <div>
           <Routes>
-<<<<<<< HEAD
-            <Route
-              path="/cart"
-              element={<Cart />}
-            />
-            <Route 
-              path ='/products/:id' 
-              exact component = {<Product />}/>
-            <Route
-              path="/products"
-              element={<AllProducts />}
-            />
-            <Route
-              path="/"
-              element={<Home />}
-            />
-            <Route
-              path="/login"
-              element={<Login />}
-            />
-=======
             <Route path="/cart" element={<Cart />} />
             <Route path="/products" element={<AllProducts />} />
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/profile" element={<Profile />} />
->>>>>>> main
           </Routes>
         </div>
       }
