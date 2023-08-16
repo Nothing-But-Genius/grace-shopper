@@ -3,6 +3,7 @@ import axios from 'axios';
 const SET_CART = 'SET_CART';
 const EDIT_CART = 'EDIT_CART';
 const CLEAR_CART = 'CLEAR_CART';
+const SET_ORDERS = 'SET_ORDERS';
 
 const cart = (state = { lineItems: [] }, action) => {
   if (action.type === SET_CART) {
@@ -13,6 +14,9 @@ const cart = (state = { lineItems: [] }, action) => {
   }
   if (action.type === CLEAR_CART) {
     return { lineItems: [] };
+  }
+  if (action.type === SET_ORDERS) {
+    return action.orders;
   }
   return state;
 };
@@ -68,6 +72,18 @@ export const fetchCart = () => {
       },
     });
     dispatch({ type: SET_CART, cart: response.data });
+  };
+};
+
+export const fetchOrders = () => {
+  return async (dispatch) => {
+    const token = window.localStorage.getItem('token');
+    const response = await axios.get('/api/orders', {
+      headers: {
+        authorization: token,
+      },
+    });
+    dispatch({ type: SET_ORDERS, orders: response.data });
   };
 };
 

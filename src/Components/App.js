@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { loginWithToken, fetchCart } from "../store";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./NavBar";
+import Profile from "./Profile";
 
 const App = () => {
   const { auth } = useSelector((state) => state);
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       }
