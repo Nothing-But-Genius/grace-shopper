@@ -1,6 +1,6 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store";
 
 const Home = () => {
   const { auth } = useSelector((state) => state);
@@ -9,10 +9,7 @@ const Home = () => {
   return (
     <div>
       <h1>Home</h1>
-      <div>
-        Welcome {auth.username ? auth.username : 'Guest'}!!
-        <button onClick={() => dispatch(logout())}>Logout</button>
-      </div>
+      <div>Welcome {auth.username ? auth.username : "Guest"}!!</div>
     </div>
   );
 };
