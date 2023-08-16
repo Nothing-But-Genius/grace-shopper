@@ -31,7 +31,7 @@
     "sequelize": "^6.25.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.6",
+    "@babel/core": "^7.22.10",
     "@babel/preset-react": "^7.18.6",
     "axios": "^1.1.3",
     "babel-loader": "^9.0.0",

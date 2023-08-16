@@ -8,7 +8,7 @@ import userReducer from "./user";
 import guest from "./guest";
 import singleProductReducer from "./singleProduct";
 import { _deleteProduct } from "./product";
->>>>>>> main
+import reviewsReducer from "./reviews";
 
 const reducer = combineReducers({
   auth,
@@ -18,6 +18,7 @@ const reducer = combineReducers({
   guest,
   product:singleProductReducer,
   _deleteProduct: productsReducer,
+  reviews:reviewsReducer,
 });
 
 const store = createStore(reducer, applyMiddleware(thunk, logger));

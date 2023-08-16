@@ -39,7 +39,7 @@ const initialState = {};
 const singleProductReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_SINGLE_PRODUCT:
-      return action.product;
+      return {...state, ...product}
     default:
       return state;
   }

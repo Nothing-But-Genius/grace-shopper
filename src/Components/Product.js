@@ -5,6 +5,7 @@ import { fetchSingleProduct } from "../store/singleProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Route, Link } from "react-router-dom"
+import Reviews from "./Reviews";
 
 
 
@@ -56,6 +57,7 @@ const Product = () => {
           render={() => <ProductDetails text={product.reviews} />}
         /> */}
       </div>
+      <Reviews />
       </div>
     )
     
