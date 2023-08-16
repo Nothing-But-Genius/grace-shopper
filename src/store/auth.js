@@ -27,9 +27,32 @@ export const loginWithToken = () => {
 
 export const attemptLogin = (credentials) => {
   return async (dispatch) => {
-    const response = await axios.post("/api/auth", credentials);
-    window.localStorage.setItem("token", response.data);
-    dispatch(loginWithToken());
+    try {
+      const response = await axios.post("/api/auth", credentials);
+      window.localStorage.setItem("token", response.data);
+      dispatch(loginWithToken());
+      return true;
+    } catch (error) {
+      console.error("Failed to login:", error);
+      return false;
+    }
+  };
+};
+
+export const attemptRegister = (credentials) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post("/api/auth/signup", credentials); // Signup route in your API
+      const token = response.data.token;
+      if (token) {
+        window.localStorage.setItem("token", token);
+        dispatch(loginWithToken());
+      } else {
+        console.error("Token not received during registration attempt.");
+      }
+    } catch (error) {
+      console.error("Error during registration attempt:", error);
+    }
   };
 };
 
