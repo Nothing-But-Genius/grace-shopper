@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function NewProductButton() {
+function NewProductButton() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,3 +42,5 @@ export default function NewProductButton() {
     </div>
   );
 }
+
+export default NewProductButton;
