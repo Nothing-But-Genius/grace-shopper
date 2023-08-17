@@ -13,6 +13,25 @@ app.post('/', async (req, res, next) => {
   }
 });
 
+app.post('/auth', async (req, res, next) => {
+  try {
+    const order = await Order.create(req.body);
+    res.json(order);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put('/:id', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.params.id);
+    await order.update(req.body);
+    res.json(order);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get('/cart', async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);

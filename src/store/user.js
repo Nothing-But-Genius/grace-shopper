@@ -2,6 +2,14 @@ import axios from "axios";
 
 const CREATE_USER = "CREATE_USER";
 const GET_USERS = "GET_USERS";
+const UPDATE_USER = "UPDATE_USER";
+
+export const _updateUser = (user) => {
+  return {
+    type: UPDATE_USER,
+    user,
+  };
+};
 
 export const _getAllUsers = (users) => {
   return {
@@ -40,6 +48,14 @@ export const createUser = (user) => {
   };
 };
 
+export const updateUser = (user) => async (dispatch) => {
+  try {
+    const { data } = await axios.put(`/api/users/${user.id}`, user);
+    dispatch(_updateUser(data));
+  } catch (err) {
+    console.error("Failed to update user:", err);
+  }
+};
 const initialState = [];
 
 const userReducer = (state = initialState, action) => {
@@ -52,6 +68,10 @@ const userReducer = (state = initialState, action) => {
         users: [...state.users, action.payload],
         error: null,
       };
+    case UPDATE_USER:
+      if (state.id === action.user.id) {
+        return action.user;
+      }
     default:
       return state;
   }

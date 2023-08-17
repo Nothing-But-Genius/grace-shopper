@@ -27,9 +27,11 @@ const Cart = () => {
   }, []);
 
   const decrement = (ev) => {
+    const productId = ev.target.name;
+
     if (auth.id) {
       let [editLineItem] = cart.lineItems.filter(
-        (lineItem) => lineItem.productId === ev.target.name
+        (lineItem) => lineItem.productId === productId
       );
       editLineItem.quantity = 1;
       dispatch(
@@ -39,26 +41,31 @@ const Cart = () => {
         })
       );
     } else {
-      let newCart = guestCart;
-      let lineItemLocation = 0;
-      let lineItem = guestCart.lineItems.find((lineItem, index) => {
-        if (lineItem.product.id === ev.target.name) {
-          lineItemLocation = index;
+      let newCart = { ...guestCart };
+      const lineItem = newCart.lineItems.find(
+        (item) => item.product.id === productId
+      );
+
+      if (lineItem) {
+        lineItem.quantity -= 1;
+        if (lineItem.quantity <= 0) {
+          newCart.lineItems = newCart.lineItems.filter(
+            (item) => item.product.id !== productId
+          );
         }
-        return lineItem.product.id === ev.target.name;
-      });
-      lineItem.quantity -= 1;
-      newCart.lineItems[lineItemLocation] = lineItem;
+      }
+
       setGuestCart(newCart);
-      console.log(guestCart);
-      window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
   const increment = (ev) => {
+    const productId = ev.target.name;
+
     if (auth.id) {
       let [editLineItem] = cart.lineItems.filter(
-        (lineItem) => lineItem.productId === ev.target.name
+        (lineItem) => lineItem.productId === productId
       );
       editLineItem.quantity = 1;
       dispatch(
@@ -68,27 +75,27 @@ const Cart = () => {
         })
       );
     } else {
-      let newCart = guestCart;
-      let lineItemLocation = 0;
-      let lineItem = guestCart.lineItems.find((lineItem, index) => {
-        if (lineItem.product.id === ev.target.name) {
-          lineItemLocation = index;
-        }
-        return lineItem.product.id === ev.target.name;
-      });
-      lineItem.quantity += 1;
-      newCart.lineItems[lineItemLocation] = lineItem;
+      let newCart = { ...guestCart };
+      const lineItem = newCart.lineItems.find(
+        (item) => item.product.id === productId
+      );
+
+      if (lineItem) {
+        lineItem.quantity += 1;
+      }
+
       setGuestCart(newCart);
-      console.log(guestCart);
-      window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
   const removeLineItemFromCart = (ev) => {
-    let [removedLineItem] = cart.lineItems.filter(
-      (lineItem) => lineItem.productId === ev.target.name
-    );
+    const productId = ev.target.name;
+
     if (auth.id) {
+      let [removedLineItem] = cart.lineItems.filter(
+        (lineItem) => lineItem.productId === productId
+      );
       dispatch(
         removeFromCart({
           product: removedLineItem.product,
@@ -96,19 +103,13 @@ const Cart = () => {
         })
       );
     } else {
-      let newCart = guestCart;
-      let lineItemLocation = 0;
-      let lineItem = guestCart.lineItems.find((lineItem, index) => {
-        if (lineItem.product.id === ev.target.name) {
-          lineItemLocation = index;
-        }
-        return lineItem.product.id === ev.target.name;
-      });
-      lineItem.quantity = 0;
-      newCart.lineItems.splice(lineItemLocation, 1);
+      let newCart = { ...guestCart };
+      newCart.lineItems = newCart.lineItems.filter(
+        (item) => item.product.id !== productId
+      );
+
       setGuestCart(newCart);
-      console.log(guestCart);
-      window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
