@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store";
-import Reviews from "./Reviews";
+
 
 
 const Home = () => {
@@ -12,7 +12,6 @@ const Home = () => {
     <div>
       <h1>Home</h1>
       <div>Welcome {auth.username ? auth.username : "Guest"}!!</div>
-      <Reviews />
     </div>
 
     

@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const GET_REVIEWS = "GET_REVIEWS";
+const SET_REVIEWS = "SET_REVIEWS";
 const ADD_REVIEW = "ADD_REVIEW";
 
 
-export const getReviews = (reviews) => {
+export const setReviews = (reviews) => {
   return {
-    type: GET_REVIEWS,
+    type: SET_REVIEWS,
     reviews,
   };
 };
@@ -19,39 +19,39 @@ export const _addReview = (review) => {
 };
 
 
-//thunks
-export const fetchReviews = () => {
-  return (dispatch) => {
-    axios
-      .get("/api/products/reviews")
-      .then((response) => {
-        dispatch(getReviews(response.data));
-      })
-      .catch((error) => {
-        console.log("error getting products", error);
-      });
-  };
-};
+export const fetchReviews = (productId) => {
+  return async (dispatch) => {
+      try {
+          const { data }  = await axios
+          .get(`/api/reviews/${productId}`)
+          dispatch(setReviews(data))         
+      } catch (error) {
+          console.log("Error fetching product reviews:", error)          
+      }
+  }
+}
+
 
 //add new Review 
-export const addReview = (review) => {
-    return async (dispatch) => {
-      try {
-        const response = await axios.post('/api/reviews', { review });
-        dispatch(_addReview (response.data));
-      } catch (error) {
-        console.error('Error adding review:', error);
-      }
-    };
+  export const addReview = (reviewData) => (dispatch) => {
+    axios
+      .post("/api/reviews", reviewData)
+      .then((response) => {
+        const review = response.data;
+        dispatch(_addReview(review));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-
+  
 
 
 const initialState = [];
 
 const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_REVIEWS:
+    case SET_REVIEWS:
       return action.reviews;
     case ADD_REVIEW:
       return [...state, action.payload];

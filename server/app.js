@@ -19,4 +19,6 @@ app.use("/api/orders", require("./api/orders"));
 app.use("/api/products", require("./api/products"));
 app.use("/api/users", require("./api/users"));
 app.use("/api/guest", require("./api/guest"));
+app.use("/api/reviews", require("./api/reviews"));
+
 module.exports = app;

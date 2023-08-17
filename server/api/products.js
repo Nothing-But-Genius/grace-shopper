@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express.Router();
 const { Product } = require("../db");
+const { Review } = require("../db")
+
 app.get("/", async (req, res, next) => {
   try {
     const products = await Product.findAll();
@@ -20,6 +22,7 @@ app.get("/:id", async (req, res, next) => {
     next(ex);
   }
 });
+
 
 // POST Route - products
 app.post("/", async (req, res, next) => {

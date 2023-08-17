@@ -18,31 +18,29 @@ export const getSingleProduct = (product) => {
 
 
 
-//Get single product axios thunk
-export const fetchSingleProduct = (productId) =>(dispatch) => {
-    axios
-    .get(`api/products/${productId}`)
-    .then((response) => {
-      const data = response.data
-      dispatch (getSingleProduct(response.data))
-    })
-    .catch((error)=> {
-      console.log("Error fetching single product", error)
-    })
+export const fetchSingleProduct = (productId) => {
+  return async (dispatch) => {
+      try {
+          const { data }  = await axios
+          .get(`/api/products/${productId}`)
+          dispatch(getSingleProduct(data))         
+      } catch (error) {
+          console.log("Error fetching single product:", error)          
+      }
+  }
 }
-
 
 
 
 const initialState = {};
 
-const singleProductReducer = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case GET_SINGLE_PRODUCT:
-      return {...state, ...product}
+      return action.product
     default:
       return state;
   }
 };
 
-export default singleProductReducer;
+

@@ -6,7 +6,7 @@ import cart from "./cart";
 import productsReducer from "./product";
 import userReducer from "./user";
 import guest from "./guest";
-import singleProductReducer from "./singleProduct";
+import singleProduct from "./singleProduct";
 import { _deleteProduct } from "./product";
 import reviewsReducer from "./reviews";
 
@@ -16,7 +16,7 @@ const reducer = combineReducers({
   products: productsReducer,
   users: userReducer,
   guest,
-  product:singleProductReducer,
+  singleProduct,
   _deleteProduct: productsReducer,
   reviews:reviewsReducer,
 });

@@ -3,11 +3,15 @@ const User = require("./User");
 const Product = require("./Product");
 const Order = require("./Order");
 const LineItem = require("./LineItem");
+const Review = require("./Review");
 
 Order.belongsTo(User);
 LineItem.belongsTo(Order);
 Order.hasMany(LineItem);
 LineItem.belongsTo(Product);
+
+Product.hasMany(Review)
+Review.belongsTo(Product , { foreignKey: 'productId' })
 
 const syncAndSeed = async () => {
   await conn.sync({ force: true });
@@ -20,9 +24,27 @@ const syncAndSeed = async () => {
     Product.create ({ name: 'bar', details: 'Hasty', price : "23"} ),
     Product.create({ name: 'bazz', details: 'resting' , price : 27}),
     User.create({ username: 'ethyl', password: '123' }),
-    User.create({ username: "spike", password: "tom", isAdmin: true }), 
+    User.create({ username: "spike", password: "tom", isAdmin: true }),
       
   ]);
+
+  const product = await Product.create({
+    name: 'Testing',
+    details: 'Testing Details',
+    price: 100,
+  });
+
+  const review = await Review.create({
+    text: 'Reviewing product is great!',
+    productId: product.id, 
+  });
+
+  const secondReview = await Review.create({
+    text: 'Reviewing 2nd product is great!',
+    productId: product.id, 
+  });
+  
+  
 
   const cart = await ethyl.getCart();
   await ethyl.addToCart({ product: bazz, quantity: 3 });
@@ -45,4 +67,5 @@ module.exports = {
   syncAndSeed,
   User,
   Product,
+  Review,
 };

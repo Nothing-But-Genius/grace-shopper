@@ -148,7 +148,7 @@ const AllProducts = () => {
       }
     }
   };
-  console.log("PRODUCTS TEST", products);
+
 
   return (
     <div id="allProducts">

@@ -1,68 +1,72 @@
-import React, { useEffect, useState } from "react"
-import ProductDetails from  "./ProductDetails"
-import { getSingleProduct } from "../store/singleProduct";
 import { fetchSingleProduct } from "../store/singleProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+
 import { Route, Link } from "react-router-dom"
+import { useParams } from 'react-router-dom';
 import Reviews from "./Reviews";
 
-
+import React, { useEffect } from 'react';
+import { fetchReviews } from "../store/reviews";
 
 
 const Product = () => {
-  const product = useSelector((state) => state.product)
-  const { productId } = useParams()
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch();
+  const { id } = useParams();// must use if react-router v6 and above
+  const product = useSelector(state => state.singleProduct) //replaces matchStateToProps
 
 
-
-  useEffect (()=> {
-    if(productId) fetchSingleProduct()
-  }, [productId]) 
+  // //Reviews
+  const reviews = useSelector (state =>state.reviews)
   
-  // const { id, name , details, price} = product
 
-    return (
-        <div className="product-wrapper">
-          <div>
-  <h1>{`${name}`}</h1>
-  <h2>{`${details}`}</h2>
-  <h3>{`${price}`}</h3>
+  useEffect(() => {
+    dispatch(fetchSingleProduct(id));
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchReviews(id));
+  }, [id, dispatch])
+
+  if (!product) {
+    return <div>Loading product...</div>;
+  }
+
+  const { name, details, price, imageUrl } = product;
+
+
+
+  return (
+    <div>
+    <div>
+      <h1>{name}</h1>
+      <img src={imageUrl} alt={name} />
+      <p>Price: {price}</p>
+      <p>Details: {details}</p>
+    </div>
+  
+  <div className="product-sub-nav">
+    {/* Links to `<current url>/reviews` and `<current url>/description`
+    <Link to={`/products/${id}/text`}>Description</Link>
+    <Link to={`/products/${id}/reviews`}>Reviews</Link>
+  </div>
+  
+  
+  <div>
+    <Route
+      path="/products/:productId/text"
+      render={() => <ProductDetails text={details} />}
+    />
+    <Route
+      path="/products/:productsId/reviews"
+      render={() => <ProductDetails text={Reviews} />}
+    /> */}
+  </div>
+  <Reviews />
 </div>
-      <div className="product-header">
-        <div className="image-wrapper">
-          <img src={product.imageUrl} alt={product.name} />
-        </div>
-        <div className="product-title-wrapper">
-          <h2>{product.name}</h2>
-          <h4>${product.price}</h4>
-        </div>
-      </div>
-
-      <div className="product-sub-nav">
-        {/* Links to `<current url>/reviews` and `<current url>/description` */}
-        <Link to={`/products/${productId}/details`}>Description</Link>
-        <Link to={`/products/${productId}/reviews`}>Reviews</Link>
-      </div>
 
 
-      <div>
-        <Route
-          path="/products/:productId/details"
-          render={() => <ProductDetails text={product.details} />}
-        />
-        {/* <Route
-          path="/products/:productsId/reviews"
-          render={() => <ProductDetails text={product.reviews} />}
-        /> */}
-      </div>
-      <Reviews />
-      </div>
-    )
-    
-
-}
+  );
+};
 
 
-export default Product
+export default Product;
