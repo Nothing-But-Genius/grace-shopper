@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { attemptLogin } from "../store";
-import { attemptRegister } from "../store";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { attemptLogin } from '../store';
+import { attemptRegister } from '../store';
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
   const dispatch = useDispatch();
   const history = useNavigate();
@@ -20,9 +20,9 @@ const Login = () => {
     ev.preventDefault();
     const isSuccess = await dispatch(attemptLogin(credentials));
     if (isSuccess) {
-      history("/");
+      history('/');
     } else {
-      console.log("bad credentials");
+      console.log('bad credentials');
     }
   };
 
@@ -32,9 +32,9 @@ const Login = () => {
     const isSuccess = await dispatch(attemptRegister(credentials));
 
     if (isSuccess) {
-      history("/");
+      history('/');
     } else {
-      console.log("User Already Exist");
+      console.log('User Already Exist');
     }
   };
 
@@ -59,8 +59,14 @@ const Login = () => {
           name="password"
           onChange={onChange}
         />
-        <FormButton title="Log in" onClick={login} />
-        <FormButton title="Register" onClick={registerUser} />
+        <FormButton
+          title="Log in"
+          onClick={login}
+        />
+        <FormButton
+          title="Register"
+          onClick={registerUser}
+        />
       </div>
     </div>
   );
@@ -89,7 +95,10 @@ const FormInput = ({
 );
 
 const FormButton = ({ title, onClick }) => (
-  <div id="button" className="row">
+  <div
+    id="button"
+    className="row"
+  >
     <button onClick={onClick}>{title}</button>
   </div>
 );

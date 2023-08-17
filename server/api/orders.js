@@ -1,19 +1,28 @@
-const express = require("express");
+const express = require('express');
 const app = express.Router();
-const { User } = require("../db");
+const { User } = require('../db');
 
 module.exports = app;
 
-app.post("/", async (req, res, next) => {
+app.post('/', async (req, res, next) => {
   try {
-    const user = await User.findByToken(req.headers.authorization);
+    const user = await User.findByToken(req.body.authorization);
     res.send(await user.createOrder());
   } catch (ex) {
     next(ex);
   }
 });
 
-app.get("/cart", async (req, res, next) => {
+app.post('/loginCart', async (req, res, next) => {
+  try {
+    const user = await User.findByToken(req.headers.authorization);
+    res.send(await user.replaceCart(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/cart', async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.getCart());
@@ -22,7 +31,18 @@ app.get("/cart", async (req, res, next) => {
   }
 });
 
-app.get("/cart/:id", async (req, res, next) => {
+app.get('/', async (req, res, next) => {
+
+  try {
+    const user = await User.findByToken(req.headers.authorization);
+    const response = await user.getOrders();
+    res.send(await user.getOrders());
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.get('/cart/:id', async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.getCart(req.params.id));
@@ -31,7 +51,7 @@ app.get("/cart/:id", async (req, res, next) => {
   }
 });
 
-app.post("/cart", async (req, res, next) => {
+app.post('/cart', async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.addToCart(req.body));
@@ -40,7 +60,7 @@ app.post("/cart", async (req, res, next) => {
   }
 });
 
-app.put("/cart", async (req, res, next) => {
+app.put('/cart', async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
     res.send(await user.removeFromCart(req.body));

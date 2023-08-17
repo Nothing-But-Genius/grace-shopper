@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { editCart, removeFromCart, fetchCart } from "../store/cart";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { editCart, removeFromCart, fetchCart, placeOrder } from '../store/cart';
+import Orders from './Orders';
+import { fetchOrders } from '../store/order';
 
 const Cart = () => {
   const { cart, auth } = useSelector((state) => state);
@@ -12,10 +14,10 @@ const Cart = () => {
       if (auth.id) {
         dispatch(fetchCart());
       } else {
-        let tempCart = JSON.parse(window.localStorage.getItem("tempCart"));
+        let tempCart = JSON.parse(window.localStorage.getItem('tempCart'));
         if (!tempCart.lineItems) {
           tempCart = { lineItems: [] };
-          window.localStorage.setItem("tempCart", JSON.stringify(tempCart));
+          window.localStorage.setItem('tempCart', JSON.stringify(tempCart));
         }
         setGuestCart(tempCart);
       }
@@ -54,7 +56,7 @@ const Cart = () => {
       }
 
       setGuestCart(newCart);
-      window.localStorage.setItem("tempCart", JSON.stringify(newCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
@@ -83,7 +85,7 @@ const Cart = () => {
       }
 
       setGuestCart(newCart);
-      window.localStorage.setItem("tempCart", JSON.stringify(newCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
@@ -107,14 +109,22 @@ const Cart = () => {
       );
 
       setGuestCart(newCart);
-      window.localStorage.setItem("tempCart", JSON.stringify(newCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
+  };
+
+  const placeCartOrder = () => {
+    if (auth.id) {
+      dispatch(placeOrder());
+      dispatch(fetchOrders());
+    }
+    return;
   };
 
   return (
     <div>
       <h1>Your Cart</h1>
-      {cart.lineItems.length === 0 && auth.id ? (
+      {auth.id && cart.lineItems && cart.lineItems.length === 0 ? (
         <div>
           <hr />
           <h2>Your Cart is Empty!</h2>
@@ -123,7 +133,7 @@ const Cart = () => {
         <ul id="products-list">
           <hr />
 
-          {auth.id
+          {auth.id && cart.lineItems
             ? cart.lineItems.map((lineItem) => {
                 return (
                   <div key={lineItem.id}>
@@ -134,18 +144,21 @@ const Cart = () => {
                       <br />
                       <button
                         name={lineItem.productId}
-                        onClick={(ev) => decrement(ev)}>
+                        onClick={(ev) => decrement(ev)}
+                      >
                         -
                       </button>
                       <button
                         name={lineItem.productId}
-                        onClick={(ev) => increment(ev)}>
+                        onClick={(ev) => increment(ev)}
+                      >
                         +
                       </button>
                       <button
                         type="button"
                         name={lineItem.productId}
-                        onClick={(ev) => removeLineItemFromCart(ev)}>
+                        onClick={(ev) => removeLineItemFromCart(ev)}
+                      >
                         Remove From Cart
                       </button>
                     </li>
@@ -163,18 +176,21 @@ const Cart = () => {
                       <br />
                       <button
                         name={lineItem.product.id}
-                        onClick={(ev) => decrement(ev)}>
+                        onClick={(ev) => decrement(ev)}
+                      >
                         -
                       </button>
                       <button
                         name={lineItem.product.id}
-                        onClick={(ev) => increment(ev)}>
+                        onClick={(ev) => increment(ev)}
+                      >
                         +
                       </button>
                       <button
                         type="button"
                         name={lineItem.product.id}
-                        onClick={(ev) => removeLineItemFromCart(ev)}>
+                        onClick={(ev) => removeLineItemFromCart(ev)}
+                      >
                         Remove From Cart
                       </button>
                     </li>
@@ -184,6 +200,12 @@ const Cart = () => {
               })}
         </ul>
       )}
+      {cart.lineItems && auth.id ? (
+        <button onClick={() => placeCartOrder()}>Place Order</button>
+      ) : (
+        <br />
+      )}
+      {auth.id ? <Orders /> : <h2>Sign In to Complete Purchase!</h2>}
     </div>
   );
 };

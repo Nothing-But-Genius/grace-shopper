@@ -1,10 +1,10 @@
-const conn = require("./conn");
+const conn = require('./conn');
 const { STRING, BOOLEAN, UUID, UUIDV4 } = conn.Sequelize;
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const JWT = process.env.JWT;
 
-const User = conn.define("user", {
+const User = conn.define('user', {
   id: {
     type: UUID,
     primaryKey: true,
@@ -75,12 +75,51 @@ User.prototype.getCart = async function () {
       [
         { model: conn.models.lineItem },
         { model: conn.models.product },
-        "name",
-        "ASC",
+        'name',
+        'ASC',
       ],
     ],
   });
   return cart;
+};
+
+User.prototype.replaceCart = async function (newCart) {
+  let cart = await conn.models.order.findOne({
+    where: {
+      userId: this.id,
+      isCart: true,
+    },
+  });
+  cart.destroy();
+  let updatedCart = await conn.models.order.create(newCart);
+
+  let returnCart = await conn.models.order.findByPk(updatedCart.id, {
+    include: [
+      {
+        model: conn.models.lineItem,
+        include: [conn.models.product],
+      },
+    ],
+    order: [
+      [
+        { model: conn.models.lineItem },
+        { model: conn.models.product },
+        'name',
+        'ASC',
+      ],
+    ],
+  });
+  return returnCart;
+};
+
+User.prototype.getOrders = async function () {
+  let orderList = await conn.models.order.findAll({
+    where: {
+      userId: this.id,
+      isCart: false,
+    },
+  });
+  return orderList;
 };
 
 User.prototype.addToCart = async function ({ product, quantity }) {
@@ -115,8 +154,8 @@ User.prototype.removeFromCart = async function ({ product, quantityToRemove }) {
   return this.getCart();
 };
 
-User.addHook("beforeSave", async (user) => {
-  if (user.changed("password")) {
+User.addHook('beforeSave', async (user) => {
+  if (user.changed('password')) {
     user.password = await bcrypt.hash(user.password, 5);
   }
 });
@@ -128,9 +167,9 @@ User.findByToken = async function (token) {
     if (user) {
       return user;
     }
-    throw "user not found";
+    throw 'user not found';
   } catch (ex) {
-    const error = new Error("bad credentials");
+    const error = new Error('bad credentials');
     error.status = 401;
     throw error;
   }
@@ -149,7 +188,7 @@ User.authenticate = async function ({ username, password }) {
   if (user && (await bcrypt.compare(password, user.password))) {
     return jwt.sign({ id: user.id }, JWT);
   }
-  const error = new Error("bad credentials");
+  const error = new Error('bad credentials');
   error.status = 401;
   throw error;
 };
