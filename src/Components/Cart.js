@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { editCart, removeFromCart, fetchCart, placeOrder } from '../store/cart';
 import Orders from './Orders';
 import { fetchOrders } from '../store/order';
+import OrderComplete from './OrderComplete';
 
 const Cart = () => {
   const { cart, auth } = useSelector((state) => state);
@@ -200,8 +202,10 @@ const Cart = () => {
               })}
         </ul>
       )}
-      {cart.lineItems && auth.id ? (
-        <button onClick={() => placeCartOrder()}>Place Order</button>
+      {cart.lineItems && auth.id && cart.lineItems.length > 0 ? (
+        <button onClick={() => placeCartOrder()}>
+          <Link to={'/orderComplete'}>Place Order</Link>
+        </button>
       ) : (
         <br />
       )}
