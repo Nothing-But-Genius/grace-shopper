@@ -63,15 +63,11 @@ const userReducer = (state = initialState, action) => {
     case GET_USERS:
       return action.users;
     case CREATE_USER:
-      return {
-        ...state,
-        users: [...state.users, action.payload],
-        error: null,
-      };
+      return [...state, action.payload];
     case UPDATE_USER:
-      if (state.id === action.user.id) {
-        return action.user;
-      }
+      return state.map((user) =>
+        user.id === action.user.id ? action.user : user
+      );
     default:
       return state;
   }
