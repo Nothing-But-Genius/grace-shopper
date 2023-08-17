@@ -102,7 +102,7 @@ const AllProducts = () => {
           return lineItem.product.id === cartProduct.id;
         });
         if (lineItem) {
-          lineItem.quantity += quantity[productId];
+          lineItem.quantity += quantity[productId] - lineItem.quantity;
           newCart.lineItems[lineItemLocation] = lineItem;
           setGuestCart((prevCart) => ({ ...prevCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
@@ -127,22 +127,22 @@ const AllProducts = () => {
         let newCart = guestCart;
         let lineItemLocation = 0;
         let lineItem = guestCart.lineItems.find((lineItem, index) => {
-          if (lineItem.product.id === productId) {
+          if (lineItem.product.id === cartProduct.id) {
             lineItemLocation = index;
           }
           return lineItem.product.id === cartProduct.id;
         });
         if (lineItem) {
-          lineItem.quantity -= quantity[productId];
+          lineItem.quantity -= quantity[productId] - lineItem.quantity;
           newCart.lineItems[lineItemLocation] = lineItem;
-          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
+          setGuestCart((guestCart) => ({ ...guestCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         } else {
           newCart.lineItems.push({
             product: cartProduct,
             quantity: newCartQuantity,
           });
-          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
+          setGuestCart((guestCart) => ({ ...guestCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         }
       }

@@ -200,12 +200,12 @@ const Cart = () => {
               })}
         </ul>
       )}
-      {cart.lineItems ? (
+      {cart.lineItems && auth.id ? (
         <button onClick={() => placeCartOrder()}>Place Order</button>
       ) : (
         <br />
       )}
-      <Orders />
+      {auth.id ? <Orders /> : <h2>Sign In to Complete Purchase!</h2>}
     </div>
   );
 };

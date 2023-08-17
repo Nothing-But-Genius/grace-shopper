@@ -10,15 +10,15 @@ function Orders() {
     dispatch(fetchOrders());
   }, []);
 
-  const buyNow = () => {
-    cart.forEach((item) => {
-      dispatch(createOrderThunk(item));
-    });
-  };
+  // const buyNow = () => {
+  //   cart.forEach((item) => {
+  //     dispatch(createOrderThunk(item));
+  //   });
+  // };
 
-  const changeOrderStatus = (orderId, status) => {
-    dispatch(updateOrderStatusThunk(orderId, status));
-  };
+  // const changeOrderStatus = (orderId, status) => {
+  //   dispatch(updateOrderStatusThunk(orderId, status));
+  // };
 
   return (
     <div>
@@ -26,7 +26,7 @@ function Orders() {
       <br />
       <hr />
       <h2>Past Orders</h2>
-      {order.orders ? order.orders.map((order) => console.log(order)) : <br />}
+      {order.orders ? <p>{console.log(order.orders[0])}</p> : <br />}
     </div>
   );
 }

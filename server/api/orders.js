@@ -13,10 +13,10 @@ app.post('/', async (req, res, next) => {
   }
 });
 
-app.post('/auth', async (req, res, next) => {
+app.post('/loginCart', async (req, res, next) => {
   try {
-    const order = await Order.create(req.body);
-    res.json(order);
+    const user = await User.findByToken(req.headers.authorization);
+    res.send(await user.replaceCart(req.body));
   } catch (error) {
     next(error);
   }

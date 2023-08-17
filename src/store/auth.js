@@ -16,12 +16,24 @@ export const loginWithToken = () => {
     try {
       const token = window.localStorage.getItem('token');
       if (token) {
-        const response = await axios.get('/api/auth', {
+        const guestCart = window.localStorage.getItem('tempCart');
+        if (guestCart.lineItems) {
+          const cartResponse = await axios.post(
+            '/api/orders/loginCart',
+            guestCart,
+            {
+              headers: {
+                authorization: token,
+              },
+            }
+          );
+        }
+        const authResponse = await axios.get('/api/auth', {
           headers: {
             authorization: token,
           },
         });
-        dispatch({ type: 'SET_AUTH', auth: response.data });
+        dispatch({ type: 'SET_AUTH', auth: authResponse.data });
       }
     } catch (error) {
       console.error('Error during login with token:', error);
