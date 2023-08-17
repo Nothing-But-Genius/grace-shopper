@@ -1,16 +1,6 @@
-<<<<<<< HEAD
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchOrders } from '../store/order';
-=======
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchOrders,
-  createOrderThunk,
-  updateOrderStatusThunk,
-} from "../store/orders";
->>>>>>> main
 
 function Orders() {
   const dispatch = useDispatch();

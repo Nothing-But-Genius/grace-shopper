@@ -26,7 +26,7 @@ const AllProducts = () => {
         dispatch(fetchCart());
       } else {
         let tempCart = JSON.parse(window.localStorage.getItem('tempCart'));
-        if (!tempCart || !tempCart.lineItems) {
+        if (!tempCart.lineItems) {
           tempCart = { lineItems: [] };
           window.localStorage.setItem('tempCart', JSON.stringify(tempCart));
         }
@@ -104,14 +104,14 @@ const AllProducts = () => {
         if (lineItem) {
           lineItem.quantity += quantity[productId];
           newCart.lineItems[lineItemLocation] = lineItem;
-          setGuestCart(newCart);
+          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         } else {
           newCart.lineItems.push({
             product: cartProduct,
             quantity: newCartQuantity,
           });
-          setGuestCart(newCart);
+          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         }
       }
@@ -135,14 +135,14 @@ const AllProducts = () => {
         if (lineItem) {
           lineItem.quantity -= quantity[productId];
           newCart.lineItems[lineItemLocation] = lineItem;
-          setGuestCart(newCart);
+          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         } else {
           newCart.lineItems.push({
             product: cartProduct,
             quantity: newCartQuantity,
           });
-          setGuestCart(newCart);
+          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
           window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         }
       }
