@@ -13,12 +13,10 @@ const Profile = () => {
     address: auth.address || "",
     phoneNumber: auth.phoneNumber || "",
   });
-  const [refresh, setRefresh] = useState(false);
 
   const handleUpdate = async () => {
     await dispatch(updateUser({ ...auth, ...formState }));
     setEditMode(false);
-    setRefresh(!refresh);
   };
 
   return (
