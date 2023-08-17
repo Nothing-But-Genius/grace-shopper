@@ -33,23 +33,15 @@ const User = conn.define("user", {
 
   email: {
     type: STRING,
-    validate: {
-      notEmpty: true,
-    },
+
     unique: true,
   },
   address: {
     type: STRING,
-    validate: {
-      notEmpty: true,
-    },
   },
 
   phoneNumber: {
     type: STRING,
-    validate: {
-      notEmpty: true,
-    },
   },
 });
 
