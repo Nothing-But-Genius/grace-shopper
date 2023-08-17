@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCart, removeFromCart, fetchCart, placeOrder } from '../store/cart';
-
+import Orders from './Orders';
+import { fetchOrders } from '../store/order';
 
 const Cart = () => {
   const { cart, auth } = useSelector((state) => state);
@@ -115,6 +115,7 @@ const Cart = () => {
   const placeCartOrder = () => {
     if (auth.id) {
       dispatch(placeOrder());
+      dispatch(fetchOrders());
     }
     return;
   };
@@ -122,7 +123,7 @@ const Cart = () => {
   return (
     <div>
       <h1>Your Cart</h1>
-      {cart.lineItems.length === 0 && auth.id ? (
+      {auth.id && cart.lineItems && cart.lineItems.length === 0 ? (
         <div>
           <hr />
           <h2>Your Cart is Empty!</h2>
@@ -131,7 +132,7 @@ const Cart = () => {
         <ul id="products-list">
           <hr />
 
-          {auth.id
+          {auth.id && cart.lineItems
             ? cart.lineItems.map((lineItem) => {
                 return (
                   <div key={lineItem.id}>
@@ -196,10 +197,14 @@ const Cart = () => {
                   </div>
                 );
               })}
-
         </ul>
       )}
-      <button onClick={() => placeCartOrder()}>Place Order</button>
+      {cart.lineItems ? (
+        <button onClick={() => placeCartOrder()}>Place Order</button>
+      ) : (
+        <br />
+      )}
+      <Orders />
     </div>
   );
 };

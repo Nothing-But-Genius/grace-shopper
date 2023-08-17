@@ -1,27 +1,22 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchOrders } from "../store/cart";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchOrders } from '../store/order';
 
 function Orders() {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.orders);
-  const cart = useSelector((state) => state.cart);
+  const { order } = useSelector((state) => state);
 
   useEffect(() => {
     dispatch(fetchOrders());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div>
-      <h2>Orders</h2>
-      {orders.map((order) => (
-        <div key={order.id}></div>
-      ))}
-
-      <h2>Cart</h2>
-      {cart.map((item) => (
-        <div key={item.id}></div>
-      ))}
+      <br />
+      <br />
+      <hr />
+      <h2>Past Orders</h2>
+      {order.orders ? order.orders.map((order) => console.log(order)) : <br />}
     </div>
   );
 }
