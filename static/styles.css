@@ -29,6 +29,10 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  text-align: center;
+}
+
 html {
   font-size: 100%;
 }
@@ -121,13 +125,13 @@ a {
 
 #allProducts {
   width: 100%;
-  padding: 20px;
+  padding: 0px;
 }
 
 .productsContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   /* Aligns items to the start of the container */
   gap: 15px;
   /* Adjust the gap between cards. Decrease if you want them closer */
