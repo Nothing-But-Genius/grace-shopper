@@ -19,29 +19,31 @@ const syncAndSeed = async () => {
     User.create({ username: 'moe', password: '123' }),
     User.create({ username: 'lucy', password: '123' }),
     User.create({ username: 'larry', password: '123' }),
-    Product.create({ name: 'foo', details: 'tasty', price: '300' }),
-    Product.create({ name: 'bar', details: 'Hasty', price: '23' }),
-    Product.create({ name: 'bazz', details: 'resting', price: 27 }),
+    Product.create({ name: 'Tank Top', details: 'This tank top is 100% combed and ringspun cotton. ', price: 50 }),
+    Product.create({ name: 'Oversized Joggers', details: 'Classic style, versatile colours  no gym bag is complete without one', price: '23' }),
+    Product.create({ name: 'Leggings', details: ' high-waisted fit, sweat-wicking fabric and seamless contours, constructed to ensure confidence and support for a workout', price: 27 }),
     User.create({ username: 'ethyl', password: '123' }),
     User.create({ username: "spike", password: "tom", isAdmin: true }),
       
   ]);
 
   const product = await Product.create({
-    name: 'Testing',
-    details: 'Testing Details',
+    name: 'Workout Hoodie',
+    details: 'Minimalist design, maximum focus. this Hoodie will never let you down.',
     price: 100,
   });
 
   const review = await Review.create({
-    text: 'Reviewing product is great!',
+    text: 'This workout hoodie is the best!',
     productId: product.id, 
   });
 
   const secondReview = await Review.create({
-    text: 'Reviewing 2nd product is great!',
+    text: 'Perfect to wear for a workout session!',
     productId: product.id, 
   });
+
+  
   
   
 
