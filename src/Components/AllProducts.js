@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getProducts } from "../store/product";
-import { editCart, removeFromCart, fetchCart } from "../store/cart";
-import { deleteProduct } from "../store/product";
-import NewProductButton from "./NewProductButton";
-import DeleteProductButton from "./DeleteProductButton";
-import { Link } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProducts } from '../store/product';
+import { editCart, removeFromCart, fetchCart } from '../store/cart';
+import { deleteProduct } from '../store/product';
+import NewProductButton from './NewProductButton';
+import DeleteProductButton from './DeleteProductButton';
+import { Link } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 const AllProducts = () => {
   const { products, cart, auth } = useSelector((state) => state);
@@ -25,10 +25,10 @@ const AllProducts = () => {
       if (auth.id) {
         dispatch(fetchCart());
       } else {
-        let tempCart = JSON.parse(window.localStorage.getItem("tempCart"));
-        if (!tempCart || !tempCart.lineItems) {
+        let tempCart = JSON.parse(window.localStorage.getItem('tempCart'));
+        if (!tempCart.lineItems) {
           tempCart = { lineItems: [] };
-          window.localStorage.setItem("tempCart", JSON.stringify(tempCart));
+          window.localStorage.setItem('tempCart', JSON.stringify(tempCart));
         }
         setGuestCart(tempCart);
       }
@@ -102,17 +102,17 @@ const AllProducts = () => {
           return lineItem.product.id === cartProduct.id;
         });
         if (lineItem) {
-          lineItem.quantity += quantity[productId];
+          lineItem.quantity += quantity[productId] - lineItem.quantity;
           newCart.lineItems[lineItemLocation] = lineItem;
-          setGuestCart(newCart);
-          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         } else {
           newCart.lineItems.push({
             product: cartProduct,
             quantity: newCartQuantity,
           });
-          setGuestCart(newCart);
-          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+          setGuestCart((prevCart) => ({ ...prevCart, newCart }));
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         }
       }
     } else {
@@ -127,28 +127,27 @@ const AllProducts = () => {
         let newCart = guestCart;
         let lineItemLocation = 0;
         let lineItem = guestCart.lineItems.find((lineItem, index) => {
-          if (lineItem.product.id === productId) {
+          if (lineItem.product.id === cartProduct.id) {
             lineItemLocation = index;
           }
           return lineItem.product.id === cartProduct.id;
         });
         if (lineItem) {
-          lineItem.quantity -= quantity[productId];
+          lineItem.quantity -= quantity[productId] - lineItem.quantity;
           newCart.lineItems[lineItemLocation] = lineItem;
-          setGuestCart(newCart);
-          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+          setGuestCart((guestCart) => ({ ...guestCart, newCart }));
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         } else {
           newCart.lineItems.push({
             product: cartProduct,
             quantity: newCartQuantity,
           });
-          setGuestCart(newCart);
-          window.localStorage.setItem("tempCart", JSON.stringify(guestCart));
+          setGuestCart((guestCart) => ({ ...guestCart, newCart }));
+          window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
         }
       }
     }
   };
-
 
   return (
     <div id="allProducts">
@@ -157,17 +156,27 @@ const AllProducts = () => {
 
       <div className="productsContainer">
         {products.map((product) => (
-          <div key={product.id} className="productCard">
+          <div
+            key={product.id}
+            className="productCard"
+          >
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 sx={{ height: 200 }} /* Reduced from 140 to 100 */
                 image={product.imageUrl}
                 title={product.name}
               />
-              <CardContent style={{ padding: "8px" }}>
+              <CardContent style={{ padding: '8px' }}>
                 <div>
-                  <Link to={`/products/${product.id}`} replace>
-                    <Typography gutterBottom variant="body1" id="large-text">
+                  <Link
+                    to={`/products/${product.id}`}
+                    replace
+                  >
+                    <Typography
+                      gutterBottom
+                      variant="body1"
+                      id="large-text"
+                    >
                       {product.name}
                     </Typography>
                   </Link>
@@ -181,17 +190,24 @@ const AllProducts = () => {
               </CardContent>
 
               <CardActions>
-                <Button name={product.id} onClick={(ev) => decrement(ev)}>
+                <Button
+                  name={product.id}
+                  onClick={(ev) => decrement(ev)}
+                >
                   -
                 </Button>
-                <Button name={product.id} onClick={(ev) => increment(ev)}>
+                <Button
+                  name={product.id}
+                  onClick={(ev) => increment(ev)}
+                >
                   +
                 </Button>
                 <Button
                   size="small"
                   type="button"
                   value={product.id}
-                  onClick={(ev) => addProdToCart(ev.target.value)}>
+                  onClick={(ev) => addProdToCart(ev.target.value)}
+                >
                   Add to Cart
                 </Button>
               </CardActions>

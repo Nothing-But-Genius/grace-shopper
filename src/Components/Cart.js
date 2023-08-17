@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { editCart, removeFromCart, fetchCart } from '../store/cart';
-import tempCart from '../store/tempCart';
-
+import { editCart, removeFromCart, fetchCart, placeOrder } from '../store/cart';
+import Orders from './Orders';
+import { fetchOrders } from '../store/order';
 
 const Cart = () => {
   const { cart, auth } = useSelector((state) => state);
@@ -28,9 +27,11 @@ const Cart = () => {
   }, []);
 
   const decrement = (ev) => {
+    const productId = ev.target.name;
+
     if (auth.id) {
       let [editLineItem] = cart.lineItems.filter(
-        (lineItem) => lineItem.productId === ev.target.name
+        (lineItem) => lineItem.productId === productId
       );
       editLineItem.quantity = 1;
       dispatch(
@@ -40,26 +41,31 @@ const Cart = () => {
         })
       );
     } else {
-      let newCart = guestCart;
-      let lineItemLocation = 0;
-      let lineItem = guestCart.lineItems.find((lineItem, index) => {
-        if (lineItem.product.id === ev.target.name) {
-          lineItemLocation = index;
+      let newCart = { ...guestCart };
+      const lineItem = newCart.lineItems.find(
+        (item) => item.product.id === productId
+      );
+
+      if (lineItem) {
+        lineItem.quantity -= 1;
+        if (lineItem.quantity <= 0) {
+          newCart.lineItems = newCart.lineItems.filter(
+            (item) => item.product.id !== productId
+          );
         }
-        return lineItem.product.id === ev.target.name;
-      });
-      lineItem.quantity -= 1;
-      newCart.lineItems[lineItemLocation] = lineItem;
+      }
+
       setGuestCart(newCart);
-      console.log(guestCart);
-      window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
   const increment = (ev) => {
+    const productId = ev.target.name;
+
     if (auth.id) {
       let [editLineItem] = cart.lineItems.filter(
-        (lineItem) => lineItem.productId === ev.target.name
+        (lineItem) => lineItem.productId === productId
       );
       editLineItem.quantity = 1;
       dispatch(
@@ -69,27 +75,27 @@ const Cart = () => {
         })
       );
     } else {
-      let newCart = guestCart;
-      let lineItemLocation = 0;
-      let lineItem = guestCart.lineItems.find((lineItem, index) => {
-        if (lineItem.product.id === ev.target.name) {
-          lineItemLocation = index;
-        }
-        return lineItem.product.id === ev.target.name;
-      });
-      lineItem.quantity += 1;
-      newCart.lineItems[lineItemLocation] = lineItem;
+      let newCart = { ...guestCart };
+      const lineItem = newCart.lineItems.find(
+        (item) => item.product.id === productId
+      );
+
+      if (lineItem) {
+        lineItem.quantity += 1;
+      }
+
       setGuestCart(newCart);
-      console.log(guestCart);
-      window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
 
   const removeLineItemFromCart = (ev) => {
-    let [removedLineItem] = cart.lineItems.filter(
-      (lineItem) => lineItem.productId === ev.target.name
-    );
+    const productId = ev.target.name;
+
     if (auth.id) {
+      let [removedLineItem] = cart.lineItems.filter(
+        (lineItem) => lineItem.productId === productId
+      );
       dispatch(
         removeFromCart({
           product: removedLineItem.product,
@@ -97,25 +103,28 @@ const Cart = () => {
         })
       );
     } else {
-      let newCart = guestCart;
-      let lineItemLocation = 0;
-      let lineItem = guestCart.lineItems.find((lineItem, index) => {
-        if (lineItem.product.id === ev.target.name) {
-          lineItemLocation = index;
-        }
-        return lineItem.product.id === ev.target.name;
-      });
-      lineItem.quantity = 0;
-      newCart.lineItems.splice(lineItemLocation, 1);
+      let newCart = { ...guestCart };
+      newCart.lineItems = newCart.lineItems.filter(
+        (item) => item.product.id !== productId
+      );
+
       setGuestCart(newCart);
-      console.log(guestCart);
-      window.localStorage.setItem('tempCart', JSON.stringify(guestCart));
+      window.localStorage.setItem('tempCart', JSON.stringify(newCart));
     }
   };
+
+  const placeCartOrder = () => {
+    if (auth.id) {
+      dispatch(placeOrder());
+      dispatch(fetchOrders());
+    }
+    return;
+  };
+
   return (
     <div>
       <h1>Your Cart</h1>
-      {cart.lineItems.length === 0 && auth.id ? (
+      {auth.id && cart.lineItems && cart.lineItems.length === 0 ? (
         <div>
           <hr />
           <h2>Your Cart is Empty!</h2>
@@ -124,7 +133,7 @@ const Cart = () => {
         <ul id="products-list">
           <hr />
 
-          {auth.id
+          {auth.id && cart.lineItems
             ? cart.lineItems.map((lineItem) => {
                 return (
                   <div key={lineItem.id}>
@@ -189,9 +198,14 @@ const Cart = () => {
                   </div>
                 );
               })}
-
         </ul>
       )}
+      {cart.lineItems && auth.id ? (
+        <button onClick={() => placeCartOrder()}>Place Order</button>
+      ) : (
+        <br />
+      )}
+      {auth.id ? <Orders /> : <h2>Sign In to Complete Purchase!</h2>}
     </div>
   );
 };

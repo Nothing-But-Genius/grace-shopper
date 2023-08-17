@@ -30,6 +30,19 @@ const User = conn.define('user', {
     allowNull: false,
     defaultValue: false,
   },
+
+  email: {
+    type: STRING,
+
+    unique: true,
+  },
+  address: {
+    type: STRING,
+  },
+
+  phoneNumber: {
+    type: STRING,
+  },
 });
 
 User.prototype.createOrder = async function () {
@@ -68,6 +81,45 @@ User.prototype.getCart = async function () {
     ],
   });
   return cart;
+};
+
+User.prototype.replaceCart = async function (newCart) {
+  let cart = await conn.models.order.findOne({
+    where: {
+      userId: this.id,
+      isCart: true,
+    },
+  });
+  cart.destroy();
+  let updatedCart = await conn.models.order.create(newCart);
+
+  let returnCart = await conn.models.order.findByPk(updatedCart.id, {
+    include: [
+      {
+        model: conn.models.lineItem,
+        include: [conn.models.product],
+      },
+    ],
+    order: [
+      [
+        { model: conn.models.lineItem },
+        { model: conn.models.product },
+        'name',
+        'ASC',
+      ],
+    ],
+  });
+  return returnCart;
+};
+
+User.prototype.getOrders = async function () {
+  let orderList = await conn.models.order.findAll({
+    where: {
+      userId: this.id,
+      isCart: false,
+    },
+  });
+  return orderList;
 };
 
 User.prototype.addToCart = async function ({ product, quantity }) {
