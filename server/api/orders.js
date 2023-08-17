@@ -13,15 +13,6 @@ app.post("/", async (req, res, next) => {
   }
 });
 
-app.post("/auth", async (req, res, next) => {
-  try {
-    const order = await Order.create(req.body);
-    res.json(order);
-  } catch (error) {
-    next(error);
-  }
-});
-
 app.put("/:id", async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.id);
