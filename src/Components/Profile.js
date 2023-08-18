@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../store/user";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUser } from '../store/user';
 
 const Profile = () => {
   const { auth } = useSelector((state) => state);
@@ -9,18 +9,17 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [formState, setFormState] = useState({
     username: auth.username,
-    email: auth.email || "",
-    address: auth.address || "",
-    phoneNumber: auth.phoneNumber || "",
+    email: auth.email || '',
+    address: auth.address || '',
+    phoneNumber: auth.phoneNumber || '',
   });
 
-  console.log("Auth after form state", auth);
   useEffect(() => {
     setFormState({
       username: auth.username,
-      email: auth.email || "",
-      address: auth.address || "",
-      phoneNumber: auth.phoneNumber || "",
+      email: auth.email,
+      address: auth.address,
+      phoneNumber: auth.phoneNumber,
     });
   }, [auth]);
 
@@ -87,16 +86,16 @@ const Profile = () => {
       ) : (
         <div>
           <p>
-            <strong>Username:</strong> {auth.username}
+            <strong>Username:</strong> {formState.username}
           </p>
           <p>
-            <strong>Email:</strong> {auth.email}
+            <strong>Email:</strong> {formState.email}
           </p>
           <p>
-            <strong>Address:</strong> {auth.address}
+            <strong>Address:</strong> {formState.address}
           </p>
           <p>
-            <strong>Phone Number:</strong> {auth.phoneNumber}
+            <strong>Phone Number:</strong> {formState.phoneNumber}
           </p>
 
           <button onClick={() => setEditMode(true)}>Edit Profile</button>
