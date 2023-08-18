@@ -29,6 +29,10 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  text-align: center;
+}
+
 html {
   font-size: 100%;
 }
@@ -121,13 +125,13 @@ a {
 
 #allProducts {
   width: 100%;
-  padding: 20px;
+  padding: 0px;
 }
 
 .productsContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   /* Aligns items to the start of the container */
   gap: 15px;
   /* Adjust the gap between cards. Decrease if you want them closer */
@@ -143,4 +147,43 @@ a {
 
 #large-text {
   font-size: 1.25rem;
+}
+
+#productimg{
+  width: 275px;
+  height :275 px;
+}
+
+.productcontainer {
+  border: 1px solid #ccc;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.productcontainer h1 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.productcontainer img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.productcontainer p {
+  margin: 5px 0;
+}
+
+.productcontainer p:first-child {
+  font-weight: bold;
+}
+
+.productcontainer p:last-child {
+  color: #171717;
 }
