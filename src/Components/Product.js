@@ -15,17 +15,12 @@ const Product = () => {
   const product = useSelector(state => state.singleProduct) //replaces matchStateToProps
 
 
-  // //Reviews
-  const reviews = useSelector (state =>state.reviews)
-  
+    
 
   useEffect(() => {
     dispatch(fetchSingleProduct(id));
   }, [id, dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchReviews(id));
-  }, [id, dispatch])
 
   if (!product) {
     return <div>Loading product...</div>;
@@ -37,30 +32,13 @@ const Product = () => {
 
   return (
     <div>
-    <div>
+    <div className= "productcontainer">
       <h1>{name}</h1>
-      <img src={imageUrl} alt={name} />
-      <p>Price: {price}</p>
+      <img src={imageUrl} alt={name} id="productimg"/>
+      <p>Price: $ {price}</p>
       <p>Details: {details}</p>
     </div>
-  
-  <div className="product-sub-nav">
-    {/* Links to `<current url>/reviews` and `<current url>/description`
-    <Link to={`/products/${id}/text`}>Description</Link>
-    <Link to={`/products/${id}/reviews`}>Reviews</Link>
-  </div>
-  
-  
-  <div>
-    <Route
-      path="/products/:productId/text"
-      render={() => <ProductDetails text={details} />}
-    />
-    <Route
-      path="/products/:productsId/reviews"
-      render={() => <ProductDetails text={Reviews} />}
-    /> */}
-  </div>
+
   <Reviews />
 </div>
 

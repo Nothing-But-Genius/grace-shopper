@@ -151,7 +151,7 @@ const AllProducts = () => {
 
   return (
     <div id="allProducts">
-      <h1>All Products</h1>
+      <h1>Attires</h1>
       {auth.isAdmin === true ? <NewProductButton /> : null}
 
       <div className="productsContainer">
