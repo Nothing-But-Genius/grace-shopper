@@ -56,7 +56,7 @@ export const updateOrderStatusThunk = (orderId, status) => async (dispatch) => {
   dispatch(updateOrderStatus(response.data.id, response.data.status));
 };
 
-const initialState = [];
+const initialState = {};
 
 export default function ordersReducer(state = initialState, action) {
   switch (action.type) {

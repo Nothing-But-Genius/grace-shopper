@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/user";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { auth } = useSelector((state) => state);
@@ -100,6 +101,9 @@ const Profile = () => {
           </p>
 
           <button onClick={() => setEditMode(true)}>Edit Profile</button>
+          <Link to={"/orders"}>
+            <button>See Past Orders</button>
+          </Link>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchOrders } from '../store/order';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchOrders } from "../store/order";
 
 function Orders() {
   const dispatch = useDispatch();
@@ -26,7 +26,6 @@ function Orders() {
       <br />
       <hr />
       <h2>Past Orders</h2>
-      {order.orders ? <p>{console.log(order.orders[0])}</p> : <br />}
     </div>
   );
 }
