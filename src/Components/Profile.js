@@ -17,9 +17,9 @@ const Profile = () => {
   useEffect(() => {
     setFormState({
       username: auth.username,
-      email: auth.email || '',
-      address: auth.address || '',
-      phoneNumber: auth.phoneNumber || '',
+      email: auth.email,
+      address: auth.address,
+      phoneNumber: auth.phoneNumber,
     });
   }, [auth]);
 
